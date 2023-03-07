@@ -1,0 +1,41 @@
+[{
+    "id": 1,
+    "title": "Tomato Paste",
+    "price": 261.84
+  }, {
+    "id": 2,
+    "title": "Cheese - Gouda Smoked",
+    "price": 129.62
+  }, {
+    "id": 3,
+    "title": "Bread - Hamburger Buns",
+    "price": 270.67
+  }, {
+    "id": 4,
+    "title": "Yogurt - Plain",
+    "price": 450.31
+  }, {
+    "id": 5,
+    "title": "Cheese - Cream Cheese",
+    "price": 162.25
+  }, {
+    "id": 6,
+    "title": "Bread - 10 Grain",
+    "price": 420.09
+  }, {
+    "id": 7,
+    "title": "Chocolate Bar - Smarties",
+    "price": 203.68
+  }, {
+    "id": 8,
+    "title": "Sparkling Wine - Rose, Freixenet",
+    "price": 171.71
+  }, {
+    "id": 9,
+    "title": "Syrup - Chocolate",
+    "price": 368.9
+  }, {
+    "id": 10,
+    "title": "Pastry - Mini French Pastries",
+    "price": 221.0
+  }]
