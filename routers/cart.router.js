@@ -46,7 +46,8 @@ router.post('/:cid/product/:pid', async (req, res) => {
       if (!cart) {
         res.status(404).json({ error: 'Carrito no encontrado' });
       } else {
-        await cm.addProductToCart(cart, product.id, quantity);
+        console.log(cart, product.id, quantity);
+        await cm.addProductToCart(cart.id, product.id, quantity);
         res.status(201).json({ message: 'Producto Agregado con exito' });
       }
     }
