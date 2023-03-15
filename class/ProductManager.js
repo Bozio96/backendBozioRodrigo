@@ -7,7 +7,8 @@ class ProductManager {
 
   addProduct(product) {
     const products = this.getProductsArchivo();
-    product.id = products.length + 1;
+    const lastProductId = products.length > 0 ? products[products.length - 1].id : 0;
+    product.id = lastProductId + 1;
     products.push(product);
     this.saveProductsArchivo(products);
   }
