@@ -12,15 +12,13 @@ const realTimeProducts = require('./routers/realTimeProducts.router')
 const port = 8080
 const app = express()
 
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
 
 app.engine('handlebars', handlebars.engine());
-app.set('views', __dirname+'/views');
+app.set('views', __dirname +'/views');
 app.set('view engine', 'handlebars');
-
 
 //RUTAS
 app.use('/api/products', productsRouter);
@@ -28,11 +26,13 @@ app.use('/api/carts', cartRouter);
 app.use('/', todosLosProductos);
 app.use('/realtimeproducts', realTimeProducts)
 
-
 const httpServer = app.listen(port, ()=>{console.log(`Corriendo en el puerto ${port}`)})
 const io = new Server(httpServer);
 
 //Servidor de sockets
-io.on('connection', socket =>{
-    console.log('Cliente conectado');
+io.on("connection", async(socket) =>{
+    console.log('Cliente conectado en ' + socket.id);
+
+    const products = await pm.getProducts();
+    io.emit("realtimeproducts", {products})
 })
