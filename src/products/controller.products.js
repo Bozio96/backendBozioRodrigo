@@ -1,9 +1,57 @@
 const {Router} = require('express');
-const productManager = require('../class/ProductManager');
+const productManager = require('../dao/ProductManager');
+const pm = new productManager('/products.json')
+const Products = require('../dao/models/Products.model');
+const uploader = require('../utils/multer.utils');
 const router = Router();
-const pm = new productManager('./files/products.json')
 
-router.get('/', async (req, res) => {
+//-------------------DB----------------------------------
+router.get('/', async (req,res)=>{
+  try {
+      const products = await Products.find()
+      res.json({message: products})
+  } catch (error) {
+    res.json(error)
+  }
+
+  res.json({message: 'Hi with GET'})
+})
+
+router.get('/loadItems', async (req,res)=>{
+  try {
+    const products = await pm.getProducts()
+    res.json({message: products })    
+  } catch (error) {
+    res.json(error)
+  }
+})
+
+router.post('/',uploader.single('file'),async (req,res)=>{
+  try {
+    const {title, description, code, price, stock, category} = req.body
+    const newProductInfo = {
+      title,
+      description,
+      code,
+      price,
+      stock,
+      category,
+      thumbnails: req.file.filename
+    }
+    const newProduct = await Products.create(newProductInfo)
+    res.json({message: newProduct})
+  } catch (error) {
+    res.json({message: error})
+  }
+})
+//Metodo Privado
+router.delete('/deleteAll', async (req,res)=>{
+  await pm.deleteAll()
+  res.json({message: 'DB vaciada'})
+})
+
+//--------------------FS--------------------------------
+/* router.get('/', async (req, res) => {
     try {
       const limit = req.query.limit;
       const products = await pm.getProducts();
@@ -13,6 +61,7 @@ router.get('/', async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+ */
 
 router.get('/:pid', async (req, res) => {
     try {
@@ -28,7 +77,7 @@ router.get('/:pid', async (req, res) => {
     }
   });
 
-router.post('/', (req,res)=>{
+/* router.post('/', (req,res)=>{
   try {
     const {title, description, code, price, stock, category, thumbnails} = req.body;
 
@@ -55,8 +104,8 @@ router.post('/', (req,res)=>{
     res.status(201).json(newProduct);
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
-});
+  } 
+}); */
 
 router.patch('/:pid', (req, res) => {
     const pid = parseInt(req.params.pid);

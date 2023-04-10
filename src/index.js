@@ -3,7 +3,7 @@ const {port} = require('./config/app.config')
 const handlebars = require('express-handlebars')
 const mongoConnect = require('../db');
 const {Server} = require('socket.io')
-const productManager = require('./class/ProductManager');
+const productManager = require('./dao/ProductManager');
 const pm = new productManager('./files/products.json')
 
 const router = require('./router');

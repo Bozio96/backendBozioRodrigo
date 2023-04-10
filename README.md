@@ -8,7 +8,7 @@ Proyecto contruido entrega tras entrega en el curso de backend de CoderHouse, se
 ## Componentes
 Paquetes a utilizar
 * Express
-* Multer
+* Multer (Instalado pero aun no implementado)
 * Handlebars
 * Mongoose
 * Dotenv

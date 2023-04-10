@@ -1,10 +1,21 @@
 const fs = require('fs');
+const Products = require('./models/Products.model');
+
+
 
 class ProductManager {
   constructor(path) {
     this.path = path;
   }
+  //DB
 
+
+  //Metodo Privado
+  async deleteAll(){
+    await Products.deleteMany()
+  }
+
+  //Cambiar todo para DB, Comentar la parte de FS
   addProduct(product) {
     const products = this.getProductsArchivo();
     const lastProductId = products.length > 0 ? products[products.length - 1].id : 0;
@@ -42,12 +53,13 @@ class ProductManager {
     this.saveProductsArchivo(filteredProducts);
   }
 
+  //Si voy a trabajar con DB usar async y modificar todo
   getProductsArchivo() {
     try {
-        if(!fs.existsSync(this.path)){
-            fs.writeFileSync(this.path, "[]");
+        if(!fs.existsSync(process.cwd() + '/src/files' + this.path)){
+            fs.writeFileSync(process.cwd() + '/src/files' + this.path, "[]");
         }
-        const productsData = fs.readFileSync(this.path, 'utf-8');
+        const productsData = fs.readFileSync(process.cwd() + '/src/files' + this.path, 'utf-8');
         const products = JSON.parse(productsData);
         return products;
         }
@@ -55,10 +67,40 @@ class ProductManager {
       console.log(error)
       return [];
     }
+    //Base de datos, asi seria la implementacion
+    /* const productos = await Products.find()
+    return productos */
+
+    /* 
+    Ejemplo: 
+    async findAll(){
+      try{
+        return await Products.find()
+      }catch(error){
+        return error
+      }
+    }
+    
+    async insertMany(newProductsInfo){
+      try{
+        return await Products.insertMany(newProductsInfo)
+      }catch(error){
+        return error
+      }
+    }
+
+    async create(newProductInfo){
+      try{
+        return await Products.create(newProductInfo)
+      }catch(error){
+        return error
+      }
+    }
+    */
   }
 
   saveProductsArchivo(products) {
-    fs.writeFileSync(this.path, JSON.stringify(products));
+    fs.writeFileSync(process.cwd() + '/src/files' + this.path, JSON.stringify(products));
   }
 }
 

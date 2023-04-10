@@ -1,11 +1,43 @@
 const { Router } = require('express');
-const CartManager = require('../class/CartManager');
-const ProductManager = require('../class/ProductManager');
+const CartManager = require('../dao/CartManager');
+const ProductManager = require('../dao/ProductManager');
+const Carts = require('../dao/models/Carts.model');
 const router = Router();
-const pm = new ProductManager('./files/products.json');
+const pm = new ProductManager('/products.json');
 const cm = new CartManager('./files/cart.json', pm);
 
-router.post('/', async (req, res) => {
+//----------------------DB-------------------------
+router.post('/', async (req,res)=>{
+  try {
+    const { products } = req.body
+    const newCartInfo = {
+        products
+    }
+    const newCart = await Carts.create(newCartInfo)
+    res.json({message: newCart})
+  } catch (error) {
+    res.json({message: error})
+  }
+})
+
+router.get('/:cid', async (req,res)=>{
+  try {
+      const{cid} = req.params
+      const cart = await Carts.findById(cid)
+      if (!cart) {
+        res.status(404).json({ error: 'Carrito No encontrado' });
+      } else {
+        res.json({message: cart})
+      }
+  } catch (error) {
+    res.json({message: error})
+  }
+})
+
+
+
+//-----------------------FS------------------------
+/* router.post('/', async (req, res) => {
   try {
     const carts = await cm.getCarts();
     const cart = {
@@ -19,8 +51,8 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-router.get('/:cid', async (req, res) => {
+ */
+/* router.get('/:cid', async (req, res) => {
   try {
     const { cid } = req.params;
     const cart = await cm.getCartsById(cid);
@@ -32,7 +64,7 @@ router.get('/:cid', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+}); */
 
 router.post('/:cid/product/:pid', async (req, res) => {
   try {
