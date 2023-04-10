@@ -11,6 +11,7 @@ Paquetes a utilizar
 * Multer
 * Handlebars
 * Mongoose
+* Dotenv
 
 Modulos
 * Servidor
@@ -18,6 +19,7 @@ Modulos
 * Modelos
 * DAO's
 * Controladores
+* Config
 
 Para ejecutar el proyecto en local, se puede hacer con:
 ```

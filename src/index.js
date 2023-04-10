@@ -1,15 +1,13 @@
 const express = require('express')
+const {port} = require('./config/app.config')
 const handlebars = require('express-handlebars')
+const mongoConnect = require('../db');
 const {Server} = require('socket.io')
 const productManager = require('./class/ProductManager');
 const pm = new productManager('./files/products.json')
 
-const productsRouter = require('./routers/products.router')
-const cartRouter = require('./routers/cart.router')
-const todosLosProductos = require('./routers/todosLosProductos.router')
-const realTimeProducts = require('./routers/realTimeProducts.router')
+const router = require('./router');
 
-const port = 8080
 const app = express()
 
 app.use(express.json());
@@ -20,16 +18,14 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname +'/views');
 app.set('view engine', 'handlebars');
 
-//RUTAS
-app.use('/api/products', productsRouter);
-app.use('/api/carts', cartRouter);
-app.use('/', todosLosProductos);
-app.use('/realtimeproducts', realTimeProducts)
+mongoConnect()
+router(app)
 
-const httpServer = app.listen(port, ()=>{console.log(`Corriendo en el puerto ${port}`)})
+//Levantamiento del servidor de express
+const httpServer = app.listen(port, ()=>{console.log(`Server running at port ${port}`)})
 const io = new Server(httpServer);
 
-//Servidor de sockets
+//Levantamiento del servidor de sockets
 io.on("connection", async(socket) =>{
     console.log('Cliente conectado en ' + socket.id);
 
