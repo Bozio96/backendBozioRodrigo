@@ -10,23 +10,22 @@ router.get('/', async (req,res)=>{
   try {
       const products = await Products.find()
       res.json({message: products})
+     
   } catch (error) {
     res.json(error)
   }
-
-  res.json({message: 'Hi with GET'})
 })
-
+//Estos dos gets deberian funcionar en uno solo
 router.get('/loadItems', async (req,res)=>{
   try {
-    const products = await pm.getProducts()
+    const products = await pm.getProducts() //Modificarlo para que sea con base de datos
     res.json({message: products })    
   } catch (error) {
     res.json(error)
   }
 })
 
-router.post('/',uploader.single('file'),async (req,res)=>{
+router.post('/', uploader.single('file'), async (req,res)=>{
   try {
     const {title, description, code, price, stock, category} = req.body
     const newProductInfo = {
@@ -44,9 +43,14 @@ router.post('/',uploader.single('file'),async (req,res)=>{
     res.json({message: error})
   }
 })
+
+//Agregar get '/:pid', patch '/:pid', detele '/:pid'
+
+//FUSIONAR EL "realTimeProducts" y el "todosLosProductos" con el "controller.products.js"
+
 //Metodo Privado
 router.delete('/deleteAll', async (req,res)=>{
-  await pm.deleteAll()
+  await pm.eliminarTodos()
   res.json({message: 'DB vaciada'})
 })
 
