@@ -42,11 +42,21 @@ router.post('/:cid/product/:pid', async (req,res)=>{
     if(!product){
       res.status(404).json({error: 'Producto no encontrado'})
     }else{
+      const {id,title, description, code, price, stock, category} = product
+      const productInfo = {
+        id,
+        title,
+        description,
+        code,
+        price,
+        stock,
+        category,
+      }
       const cart = await cm.getCartDBbyId(cid)
       if(!cart){
         res.status(404).json({error: 'Carrito no encontrado'})
       }else{
-        await cm.addProductDB(cid, pid, quantity)
+        await cm.addProductDB(cid, productInfo, quantity)
         res.status(201).json({message: 'Producto agregado al carrito'})
       }
     }

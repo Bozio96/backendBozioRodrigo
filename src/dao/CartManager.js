@@ -24,12 +24,24 @@ class CartManager {
     }
   } 
   
-  async addProductDB(cartId, prodId, quantity){
+  async addProductDB(cartId, prodInfo, quantity){
     try {
-      const prod = await this.productManager.buscarUno(prodId)
-      if(prod){
-        //Probar usando el metodo Find by id and update
+      const cart = await Carts.findById(cartId);
+      const newProduct = {
+        ...prodInfo,
+        quantity
       }
+      if(cart.products.some(i => i.id === prodInfo.id)){
+        await Carts.updateOne(
+          {_id: cartId, 'products.id': prodInfo.id },
+          {$inc: {'products.$.quantity': quantity}}
+        )
+      }else{
+        await Carts.updateOne({$push: {products: newProduct}})
+        return true
+      }
+
+      //const newProd = cart.products.push(newProdInfo)
     } catch (error) {
       return error
     }
