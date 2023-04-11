@@ -13,8 +13,8 @@ router.post('/', async (req,res)=>{
     const newCartInfo = {
         products
     }
-    const newCart = await Carts.create(newCartInfo)
-    res.json({message: newCart})
+    await cm.createCartDB(newCartInfo)
+    res.status(201).json({message: 'Carrito creado con exito'})
   } catch (error) {
     res.json({message: error})
   }
@@ -23,7 +23,7 @@ router.post('/', async (req,res)=>{
 router.get('/:cid', async (req,res)=>{
   try {
       const{cid} = req.params
-      const cart = await Carts.findById(cid)
+      const cart = await cm.getCartDBbyId(cid)
       if (!cart) {
         res.status(404).json({ error: 'Carrito No encontrado' });
       } else {
@@ -34,7 +34,48 @@ router.get('/:cid', async (req,res)=>{
   }
 })
 
+router.post('/:cid/product/:pid', async (req,res)=>{
+  try {
+    const {cid, pid} = req.params;
+    const {quantity} = req.body
+    const product = await pm.buscarUno(pid);
+    if(!product){
+      res.status(404).json({error: 'Producto no encontrado'})
+    }else{
+      const cart = await cm.getCartDBbyId(cid)
+      if(!cart){
+        res.status(404).json({error: 'Carrito no encontrado'})
+      }else{
+        await cm.addProductDB(cid, pid, quantity)
+        res.status(201).json({message: 'Producto agregado al carrito'})
+      }
+    }
+  } catch (error) {
+    return error
+  }
+})
 
+/* router.post('/:cid/product/:pid', async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const quantity = parseInt(req.body.quantity) || 1;
+    const product = await pm.getProductById(pid);
+    if (!product) {
+      res.status(404).json({ error: 'Producto no encontrado' });
+    } else {
+      const cart = await cm.getCartsById(cid);
+      if (!cart) {
+        res.status(404).json({ error: 'Carrito no encontrado' });
+      } else {
+        console.log(cart, product.id, quantity);
+        await cm.addProductToCart(cart.id, product.id, quantity);
+        res.status(201).json({ message: 'Producto Agregado con exito' });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}); */
 
 //-----------------------FS------------------------
 /* router.post('/', async (req, res) => {
@@ -66,7 +107,7 @@ router.get('/:cid', async (req,res)=>{
   }
 }); */
 
-router.post('/:cid/product/:pid', async (req, res) => {
+/* router.post('/:cid/product/:pid', async (req, res) => {
   try {
     const { cid, pid } = req.params;
     const quantity = parseInt(req.body.quantity) || 1;
@@ -86,6 +127,6 @@ router.post('/:cid/product/:pid', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+}); */
 
 module.exports = router;

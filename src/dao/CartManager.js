@@ -1,4 +1,5 @@
 const fs = require("fs");
+const Carts = require('./models/Carts.model')
 
 class CartManager {
   constructor(path, pm){
@@ -6,6 +7,35 @@ class CartManager {
     this.productManager = pm;
   }
 
+  //------------------DB---------------------------------------------
+  async getCartDBbyId(id){
+    try {
+      return await Carts.findById(id)
+    } catch (error) {
+      return error
+    }
+  }
+
+  async createCartDB(data){
+    try {
+      return await Carts.create(data)
+    } catch (error) {
+      return error
+    }
+  } 
+  
+  async addProductDB(cartId, prodId, quantity){
+    try {
+      const prod = await this.productManager.buscarUno(prodId)
+      if(prod){
+        //Probar usando el metodo Find by id and update
+      }
+    } catch (error) {
+      return error
+    }
+  }
+
+  //------------------FS---------------------------------------------
   addProductToCart(cartId, productId, quantity) {
     const carts = this.getCartsArchivo();
     const cartIndex = carts.findIndex(c => c.id === cartId);

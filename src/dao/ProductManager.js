@@ -18,7 +18,7 @@ class ProductManager {
     try {
       return await Products.findById(id)
     } catch (error) {
-      return error
+      return 'No se pudo encontrar'
     }
   }
 
@@ -38,9 +38,9 @@ class ProductManager {
     }
   }
 
-  async actualizarUno(info){
+  async actualizarUno(id, data){
     try {
-      return await Products.updateOne(info)
+       return await Products.findByIdAndUpdate(id, data, {new: true})
     } catch (error) {
       return error
     }
@@ -48,16 +48,16 @@ class ProductManager {
 
   async eliminarUno(id){
     try {
-      return await Products.deleteOne(id)
+      return await Products.findByIdAndUpdate(id, {status: false}, {new: true})
     } catch (error) {
       return error
     }
   }
 
   //Metodo Privado
-  async eliminarTodos(){
+  /* async eliminarTodos(){
     await Products.deleteMany()
-  }
+  } */
 
   //------------------------FS-------------------------------------------------
   addProduct(product) {

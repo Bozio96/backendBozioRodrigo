@@ -1,25 +1,15 @@
 const {Router} = require('express');
 const productManager = require('../dao/ProductManager');
 const pm = new productManager('/products.json')
-const Products = require('../dao/models/Products.model');
 const uploader = require('../utils/multer.utils');
 const router = Router();
 
 //-------------------DB----------------------------------
 router.get('/', async (req,res)=>{
   try {
-      const products = await Products.find()
+      const products = await pm.buscarTodos()
       res.json({message: products})
      
-  } catch (error) {
-    res.json(error)
-  }
-})
-//Estos dos gets deberian funcionar en uno solo
-router.get('/loadItems', async (req,res)=>{
-  try {
-    const products = await pm.getProducts() //Modificarlo para que sea con base de datos
-    res.json({message: products })    
   } catch (error) {
     res.json(error)
   }
@@ -33,26 +23,69 @@ router.post('/', uploader.single('file'), async (req,res)=>{
       description,
       code,
       price,
+      status: true,
       stock,
       category,
       thumbnails: req.file.filename
     }
-    const newProduct = await Products.create(newProductInfo)
+    const newProduct = await pm.crearUno(newProductInfo)
     res.json({message: newProduct})
   } catch (error) {
     res.json({message: error})
   }
 })
 
-//Agregar get '/:pid', patch '/:pid', detele '/:pid'
+router.get('/:pid', async (req,res)=>{
+  try {
+    const {pid} = req.params;
+    const product = await pm.buscarUno(pid)
+    if(!product){
+      res.status(404).json({error: 'Product not found'})
+    }else{
+      res.status(200).json(product)
+    }
+  } catch (error) {
+    res.status(500).json({message: 'Internal server error'})
+  }
+}) //Corregir los codigos de estado, si falla devuelve 200
 
-//FUSIONAR EL "realTimeProducts" y el "todosLosProductos" con el "controller.products.js"
+router.patch('/:pid', uploader.single('file'), async(req,res)=>{
+  try{
+    const {pid} = req.params;
+    const data = req.body
+    await pm.actualizarUno(pid, data);
+    res.status(200).json('Producto actualizado')
+  }catch(error)
+  {
+    res.json({message: error})
+  }
+})
+
+router.delete('/:pid', async(req,res)=>{
+  try {
+    const {pid} = req.params;
+    pm.eliminarUno(pid);
+    res.status(200).json('Producto Eliminado')
+  } catch (error) {
+    res.json({message: error})
+  }
+})
 
 //Metodo Privado
-router.delete('/deleteAll', async (req,res)=>{
+/* router.delete('/deleteAll', async (req,res)=>{
   await pm.eliminarTodos()
   res.json({message: 'DB vaciada'})
-})
+}) */
+
+//METODO NO IMPLEMENTADO EN ESTA ENTREGA
+/* router.get('/loadItems', async (req,res)=>{
+  try {
+    const products = await pm.getProducts() //Modificarlo para que sea con base de datos
+    res.json({message: products })    
+  } catch (error) {
+    res.json(error)
+  }
+}) */
 
 //--------------------FS--------------------------------
 /* router.get('/', async (req, res) => {
@@ -67,7 +100,7 @@ router.delete('/deleteAll', async (req,res)=>{
   });
  */
 
-router.get('/:pid', async (req, res) => {
+/* router.get('/:pid', async (req, res) => {
     try {
       const { pid } = req.params;
       const product = await pm.getProductById(pid);
@@ -79,7 +112,7 @@ router.get('/:pid', async (req, res) => {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  });
+  }); */
 
 /* router.post('/', (req,res)=>{
   try {
@@ -111,7 +144,7 @@ router.get('/:pid', async (req, res) => {
   } 
 }); */
 
-router.patch('/:pid', (req, res) => {
+/* router.patch('/:pid', (req, res) => {
     const pid = parseInt(req.params.pid);
     const updatedProduct = req.body;
     pm.updateProduct(pid, updatedProduct);
@@ -122,6 +155,6 @@ router.delete('/:pid', (req, res) => {
     const pid = parseInt(req.params.pid);
     pm.deleteProduct(pid);
     res.status(200).json("Producto eliminado con exito");
-  });
+  }); */
 
 module.exports = router
