@@ -1,5 +1,6 @@
 const socket = io();
 //const productsContainer = document.getElementById("products");
+const chat = document.getElementById('messageLogs')
 
 const swal = async()=>{
   const chatBox = document.getElementById('chatBox')
@@ -15,7 +16,7 @@ const swal = async()=>{
       allowOutsideClick: false
     })
     const user = result.value
-
+  
     socket.emit('newUser', user)
 
     socket.on('userConnected', user =>{
@@ -34,7 +35,12 @@ const swal = async()=>{
     chatBox.addEventListener('keyup', e=>{
       if(e.key === 'Enter'){
         if(chatBox.value.trim().length > 0){
-          socket.emit('message', {user, message: chatBox.value})
+          const newMessage = {
+            user: user,
+            message: chatBox.value
+          }
+          socket.emit('message', {newMessage})
+          console.log(newMessage) //Aca lo guarda como deberia ser
           chatBox.value = ''
         }
       }
@@ -45,15 +51,17 @@ const swal = async()=>{
   }
 }
 
-socket.on('messageLogs', data =>{
-  const log = document.getElementById('messageLogs')
-  let messages = ''
+const newMessage = (data) => {
+  const { user, message } = data
+  const chat = document.createElement('p')
+  chat.innerHTML = `
+      ${user}: ${message}
+  `
+  return chat
+}
 
-  data.forEach(message => {
-    messages = messages + `${message.user}: ${message.message} </br>`
-  })
-
-  log.innerHTML = messages
+socket.on('messageFinal', data =>{
+  chat.append(newMessage(data))
 })
 /* 
 socket.on("realtimeproducts", (productos) => {

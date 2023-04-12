@@ -4,7 +4,11 @@ const handlebars = require('express-handlebars')
 const mongoConnect = require('../db');
 const {Server} = require('socket.io')
 const productManager = require('./dao/ProductManager');
-const pm = new productManager('./files/products.json')
+const MessagesDao = require('./dao/Messages.dao')
+
+const pm = new productManager('./files/products.json');
+
+const Messages = new MessagesDao()
 
 const router = require('./router');
 const messages = []
@@ -31,9 +35,15 @@ const io = new Server(httpServer);
 io.on("connection", async(socket) =>{
     console.log('Cliente conectado en ' + socket.id);
 
-    socket.on('message', data =>{
+    /* socket.on('message', data =>{
         messages.push(data) //Guarda los mensajes que recibe
         io.emit('messageLogs', messages) //Muestra en pantalla los mensajes guardados desde el array / DB
+    }) */
+
+    socket.on('message', (data) =>{
+        const {user, message} = data //...pero aca ya no
+        const chat = Messages.create(user,message);
+        io.emit('messageFinal', chat)
     })
 
     socket.on('newUser', user =>{

@@ -6,7 +6,11 @@
 
 <div>
     <h2>Mensajes</h2>
-    <p id="messageLogs"></p>
+    <div id="messageLogs">
+        {{#each chats}}
+        <p>{{this.user}}: {{this.message}}</p>
+        {{/each}}
+    </div>
 </div>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
