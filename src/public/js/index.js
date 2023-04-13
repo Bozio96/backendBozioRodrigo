@@ -31,8 +31,6 @@ const swal = async()=>{
         background: '#e1e1e1'
       })
     })
-
-    console.log('Log antes del enter en el cliente ' + user)
     
     chatBox.addEventListener('keyup', e=>{
       if(e.key === 'Enter'){
@@ -41,8 +39,7 @@ const swal = async()=>{
             user: user,
             message: chatBox.value
           }
-          console.log('Log en el cliente ' + newMessage)
-          socket.emit('message', {newMessage})
+          socket.emit('message', newMessage)
           chatBox.value = ''
         }
       }

@@ -41,7 +41,6 @@ io.on("connection", async(socket) =>{
     }) */
 
     socket.on('message', async ({user,message}) =>{
-        console.log('Log en el servidor ' + user, message)
         const chat = await Messages.create(user,message);
         io.emit('messageFinal', chat)
     })
