@@ -8,7 +8,7 @@ class ChatsDao {
         try {
             const newMessage = {user, message}
             const chat = await Messages.create(newMessage)
-            //console.log(chat);
+            console.log('Log en el dao: ' + chat); //Aca llega vacio
             return chat
         } catch (error) {
             return error

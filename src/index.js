@@ -40,9 +40,9 @@ io.on("connection", async(socket) =>{
         io.emit('messageLogs', messages) //Muestra en pantalla los mensajes guardados desde el array / DB
     }) */
 
-    socket.on('message', (data) =>{
-        const {user, message} = data //...pero aca ya no
-        const chat = Messages.create(user,message);
+    socket.on('message', async ({user,message}) =>{
+        console.log('Log en el servidor ' + user, message)
+        const chat = await Messages.create(user,message);
         io.emit('messageFinal', chat)
     })
 

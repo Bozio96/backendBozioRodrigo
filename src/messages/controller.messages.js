@@ -15,8 +15,8 @@ router.get('/', async(req,res)=>{
 
 router.post('/', async (req, res) => {
     try {
-        const { sender, message } = req.body
-        const msj = await Chats.create(sender, message)
+        const { user, message } = req.body
+        const msj = await Chats.create(user, message)
         res.json({ messages: msj })
     } catch (error) {
         console.log(error);
