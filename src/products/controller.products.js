@@ -7,17 +7,33 @@ const router = Router();
 //-------------------DB----------------------------------
 router.get('/', async (req,res)=>{
   try {
-      const products = await pm.buscarTodos()
-      res.json({message: products})
+      const limit = parseInt(req.query.limit)||10;
+      const page = parseInt(req.query.page)||1;
+      const query = req.query.query || '';
+      const sort = req.query.sort || '';
+      const result = await pm.buscarConPaginacion(limit, page, query, sort);
+      //const products = await pm.buscarTodos()
+      res.json({
+        status: "success",
+        payload: result.products,
+        totalPages: result.totalPages,
+        prevPage: result.prevPage,
+        nextPage: result.nextPage,
+        page: result.page,
+        hasPrevPage: result.hasPrevPage,
+        hasNextPage: result.hasNextPage,
+        prevLink: result.prevLink,
+        nextLink: result.nextLink
+      })
      
   } catch (error) {
-    res.json(error)
+    res.json({status: "error", payload: error.message})
   }
 })
 
-router.post('/', uploader.single('file'), async (req,res)=>{
+router.post('/', /* uploader.single('file'),  */async (req,res)=>{
   try {
-    const {title, description, code, price, stock, category} = req.body
+    const {title, description, code, price, stock, category, thumbnails} = req.body
     const newProductInfo = {
       title,
       description,
@@ -26,10 +42,15 @@ router.post('/', uploader.single('file'), async (req,res)=>{
       status: true,
       stock,
       category,
-      thumbnails: req.file.filename
+      //thumbnails: req.file.filename //Comentado para no usar multer y poder pasar productos por JSON y no form
+      thumbnails
     }
     const newProduct = await pm.crearUno(newProductInfo)
-    res.json({message: newProduct})
+    res.json({
+      status: "success",
+      message: "Producto Agregado con exito",
+      payload: newProduct
+    })
   } catch (error) {
     res.json({message: error})
   }
