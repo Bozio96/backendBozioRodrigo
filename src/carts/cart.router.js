@@ -23,7 +23,7 @@ router.post('/', async (req,res)=>{
 router.get('/:cid', async (req,res)=>{
   try {
       const{cid} = req.params
-      const cart = await cm.getCartDBbyId(cid)
+      const cart = await cm.getCartDBbyId(cid).populate('products.product')
       if (!cart) {
         res.status(404).json({ error: 'Carrito No encontrado' });
       } else {
@@ -65,6 +65,51 @@ router.post('/:cid/product/:pid', async (req,res)=>{
   }
 })
 
+//NUEVOS METODOS
+router.delete('/:cid/products/:pid', async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    await cm.removeProductDB(cid, pid);
+    res.json({ message: 'Producto eliminado del carrito' });
+  } catch (error) {
+    res.json({ message: error });
+  }
+});
+
+router.put('/:cid', async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const { products } = req.body;
+    await cm.updateCartDB(cid, products);
+    res.json({ message: 'Carrito actualizado con éxito' });
+  } catch (error) {
+    res.json({ message: error });
+  }
+})
+
+router.put('/:cid/products/:pid', async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const { quantity } = req.body;
+    await cm.updateProductDB(cid, pid, quantity);
+    res.json({ message: 'Cantidad de producto actualizada' });
+  } catch (error) {
+    res.json({ message: error });
+  }
+});
+
+router.delete('/:cid', async (req, res) => {
+  try {
+    const { cid } = req.params;
+    await cm.clearCartDB(cid);
+    res.json({ message: 'Carrito vaciado' });
+  } catch (error) {
+    res.json({ message: error });
+  }
+});
+
+//-----------------------FS------------------------
+
 /* router.post('/:cid/product/:pid', async (req, res) => {
   try {
     const { cid, pid } = req.params;
@@ -87,7 +132,7 @@ router.post('/:cid/product/:pid', async (req,res)=>{
   }
 }); */
 
-//-----------------------FS------------------------
+
 /* router.post('/', async (req, res) => {
   try {
     const carts = await cm.getCarts();

@@ -47,6 +47,63 @@ class CartManager {
     }
   }
 
+  //NUEVOS METODOS
+  async removeProductDB(cartId, productId) {
+    try {
+      const cart = await Cart.findOneAndUpdate(
+        { _id: cartId },
+        { $pull: { products: { product: productId } } },
+        { new: true }
+      ).populate('products.product');
+
+      return cart;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateCartDB(cartId, products) {
+    try {
+      const cart = await Cart.findByIdAndUpdate(
+        cartId,
+        { products },
+        { new: true }
+      ).populate('products.product');
+
+      return cart;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateProductDB(cartId, productId, quantity) {
+    try {
+      const cart = await Cart.findOneAndUpdate(
+        { _id: cartId, 'products.product': productId },
+        { $set: { 'products.$.quantity': quantity } },
+        { new: true }
+      ).populate('products.product');
+
+      return cart;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async clearCartDB(cartId) {
+    try {
+      const cart = await Cart.findByIdAndUpdate(
+        cartId,
+        { products: [] },
+        { new: true }
+      ).populate('products.product');
+
+      return cart;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   //------------------FS---------------------------------------------
   addProductToCart(cartId, productId, quantity) {
     const carts = this.getCartsArchivo();

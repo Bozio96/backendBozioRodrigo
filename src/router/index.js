@@ -8,8 +8,8 @@ const router = app =>{
     app.use('/', productsRouter) //Para que muestre algo al principio
     app.use('/api/products', productsRouter); 
     //MODIFICAR: 
-    //(?limit=10&?page=1&?query=filtro&?sort=asc/desc) 
-    //Son valores por defecto //Los productos se deben buscar por categoria o disponibilidad, y ordenados por precio asc o desc
+    //(?query=filtro) 
+    //Los productos se deben buscar por categoria o disponibilidad (stock > 0)
     app.use('/api/carts', cartRouter);
     //MODIFICAR:
     //DELETE: /:cid/products/:pid --- eliminar del carrito, el producto seleccionado.

@@ -5,12 +5,16 @@ const collectionName = 'cart'
 const collectionSchema = new mongoose.Schema({
     products: [
     {
-        title: String,
+        /* title: String,
         descripcion: String,
         code: String,
         price: Number,
         stock: Number,
-        categoty: String,
+        categoty: String, */
+        product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Products'
+        },
         quantity: Number
     }
     ]   
