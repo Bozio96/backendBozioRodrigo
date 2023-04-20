@@ -34,7 +34,18 @@ class ProductManager {
         },
       };
       //NO FUNCIONA EL QUERY
-      const queryObject = query ? { $or: [{ name: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }] } : {};
+      const queryObject = {
+        /* $and: [
+          { stock: { $gt: 0 } },  // Stock mayor a cero
+          {
+            $or: [
+              { title: { $regex: query, $options: 'i' } },
+              { description: { $regex: query, $options: 'i' } },
+            ],
+          },
+          { category: { $regex: category, $options: 'i' } }, // Por categoría
+        ], */
+      };
       const result = await Products.paginate(queryObject, options);
       return result;
     } catch (error) {
