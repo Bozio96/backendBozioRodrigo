@@ -32,11 +32,9 @@ class ProductManager {
           nextPageLink: 'nextLink',
           prevPageLink: 'prevLink'
         },
-        collation: {
-          locale: 'en'
-        }
       };
-      const queryObject = query ? { type: query } : {};
+      //NO FUNCIONA EL QUERY
+      const queryObject = query ? { $or: [{ name: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }] } : {};
       const result = await Products.paginate(queryObject, options);
       return result;
     } catch (error) {

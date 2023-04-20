@@ -13,6 +13,7 @@ router.get('/', async (req,res)=>{
       const sort = req.query.sort || '';
       const result = await pm.buscarConPaginacion(limit, page, query, sort);
       //const products = await pm.buscarTodos()
+      /* console.log(result.prevPageLink, result.nextPageLink) */
       res.json({
         status: "success",
         payload: result.products,
@@ -22,8 +23,8 @@ router.get('/', async (req,res)=>{
         page: result.page,
         hasPrevPage: result.hasPrevPage,
         hasNextPage: result.hasNextPage,
-        prevLink: result.prevLink,
-        nextLink: result.nextLink
+        /* prevLink: result.prevPageLink,
+        nextLink: result.nextPageLink */
       })
      
   } catch (error) {
