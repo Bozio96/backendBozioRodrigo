@@ -9,10 +9,12 @@ router.get('/', async (req,res)=>{
   try {
       const limit = parseInt(req.query.limit)||10;
       const page = parseInt(req.query.page)||1;
-      const query = req.query.query || '';
+      /* const query = req.query.query || ''; */
+      const {category} = req.query || '';
       const sort = req.query.sort || '';
-      const result = await pm.buscarConPaginacion(limit, page, query, sort);
-      
+
+      const result = await pm.buscarConPaginacion(limit, page, category, sort);
+
       res.json({
         status: "success",
         payload: result.products,
@@ -22,8 +24,8 @@ router.get('/', async (req,res)=>{
         page: result.page,
         hasPrevPage: result.hasPrevPage,
         hasNextPage: result.hasNextPage,
-        prevLink: result.hasPrevPage ? `http://${req.headers.host}/api/products?page=${result.prevPage}&limit=${limit}&sort=${sort}&query=${query}` : null,
-        nextLink: result.hasNextPage ? `http://${req.headers.host}/api/products?page=${result.nextPage}&limit=${limit}&sort=${sort}&query=${query}` : null
+        prevLink: result.hasPrevPage ? `http://${req.headers.host}/api/products?page=${result.prevPage}&limit=${limit}&sort=${sort}&query=${category}` : null,
+        nextLink: result.hasNextPage ? `http://${req.headers.host}/api/products?page=${result.nextPage}&limit=${limit}&sort=${sort}&query=${category}` : null
       })
      
   } catch (error) {
