@@ -61,6 +61,10 @@ class CartManager {
 
   async updateCartDB(cartId, products) {
     try {
+
+      console.log(products) //Hasta ahora aca estoy trayendo un array
+      //Lo que se puede hacer es guardar ese array en una variable, hacer un push al cart y luego guardar todo
+      //con un save
       const cart = await Carts.findByIdAndUpdate(
         cartId,
         { products },
@@ -117,15 +121,15 @@ class CartManager {
     try {
       const cart = await Carts.findByIdAndUpdate(
         cartId,
-        { products: [] },
+        { productos: [] },
         { new: true }
       );
-  
+
       return cart;
     } catch (error) {
       throw error;
     }
-  } //NO FUNCIONA
+  }
 
  /*  async clearCartDB(cartId) {
     try {

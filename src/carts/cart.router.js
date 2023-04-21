@@ -87,8 +87,9 @@ router.delete('/:cid/products/:pid', async (req, res) => {
 router.put("/:cid", async (req, res) => {
   try {
     const { cid } = req.params;
-    const { products } = req.body;
-    await cm.updateCartDB(cid, products);
+    const { productos } = req.body;
+  
+    await cm.updateCartDB(cid, productos);
     res.json({ message: "Carrito actualizado con éxito" });
   } catch (error) {
     res.json({ message: error });
@@ -114,7 +115,7 @@ router.delete("/:cid", async (req, res) => {
   } catch (error) {
     res.json({ message: error });
   }
-}); //NO FUNCIONA
+});
 
 //-----------------------FS------------------------
 
