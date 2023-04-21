@@ -1,7 +1,7 @@
 const express = require('express')
 const {port} = require('./config/app.config')
-const handlebars = require('express-handlebars')
-
+const handlebars = require('express-handlebars');
+const cookieParser = require('cookie-parser');
 const mongoConnect = require('../db');
 const {Server} = require('socket.io')
 const productManager = require('./dao/ProductManager');
@@ -19,8 +19,16 @@ const app = express()
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
+app.use(cookieParser());
 
-app.engine('handlebars', handlebars.engine());
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+const hbs = handlebars.create({
+  handlebars: allowInsecurePrototypeAccess(require('handlebars')),
+  defaultLayout: 'main'
+});
+
+/* app.engine('handlebars', handlebars.engine()); */
+app.engine('handlebars', hbs.engine);
 app.set('views', __dirname +'/views');
 app.set('view engine', 'handlebars');
 

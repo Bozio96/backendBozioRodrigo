@@ -14,7 +14,9 @@ class ProductManager {
     }
   }
 
-  async buscarConPaginacion(limit, page, query, sort) {
+/* async buscarConPaginacion(query, {limit, page, sort})  */ 
+  async buscarConPaginacion(limit, page, query, sort) 
+  {
     try {
       const options = {
         page: page,

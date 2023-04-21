@@ -4,16 +4,19 @@ const pm = new productManager('/products.json')
 const uploader = require('../utils/multer.utils');
 const router = Router();
 
+
 //-------------------DB----------------------------------
 router.get('/', async (req,res)=>{
   try {
       const limit = parseInt(req.query.limit)||10;
       const page = parseInt(req.query.page)||1;
       /* const query = req.query.query || ''; */
-      const {category} = req.query || '';
+      const category = req.query.category || '';
+      /* const query = req.query.query ? { $or: [{ name: { $regex: req.query.query, $options: 'i' } }, { category: { $regex: req.query.query, $options: 'i' } }] } : {}; */
       const sort = req.query.sort || '';
 
-      const result = await pm.buscarConPaginacion(limit, page, category, sort);
+      const result = await pm.buscarConPaginacion(limit, page, category , sort);
+      /* const result = await pm.buscarConPaginacion(query, {limit, page, sort}) */
 
       const data = {
         status: "success",
@@ -24,8 +27,8 @@ router.get('/', async (req,res)=>{
         page: result.page,
         hasPrevPage: result.hasPrevPage,
         hasNextPage: result.hasNextPage,
-        prevLink: result.hasPrevPage ? `http://${req.headers.host}/api/products?page=${result.prevPage}&limit=${limit}&sort=${sort}&query=${category}` : null,
-        nextLink: result.hasNextPage ? `http://${req.headers.host}/api/products?page=${result.nextPage}&limit=${limit}&sort=${sort}&query=${category}` : null
+        prevLink: result.hasPrevPage ? `http://${req.headers.host}/api/products?page=${result.prevPage}&limit=${limit}&sort=${sort}&category=${category}` : null,
+        nextLink: result.hasNextPage ? `http://${req.headers.host}/api/products?page=${result.nextPage}&limit=${limit}&sort=${sort}&category=${category}` : null
       }
 
      res.render('products.handlebars', {
@@ -38,6 +41,8 @@ router.get('/', async (req,res)=>{
       hasNextPage: data.hasNextPage,
       prevLink: data.prevLink,
       nextLink: data.nextLink,
+      allowProtoPropertiesByDefault: true,
+      allowProtoMethodsByDefault: true
      })
 
   } catch (error) {

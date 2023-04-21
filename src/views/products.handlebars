@@ -3,9 +3,9 @@
 {{#each products}}
   <li>
     <h2>Title: {{this.title}}</h2>
-    <p>Description: {{!-- {{this.description}} --}}</p>
-    <p>Price: {{!-- {{this.price}} --}}</p>
-    <p>Category: {{!-- {{this.category}} --}}</p>
+    <p>Description: {{this.description}}</p>
+    <p>Price: {{this.price}}</p>
+    <p>Category: {{this.category}}</p>
     {{!-- {{#if ../cartId}}
     <form method="POST" action="/api/carts/{{../cartId}}/{{this._id}}">
       <input type="hidden" name="product_id" value="{{_id}}">
