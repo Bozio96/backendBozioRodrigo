@@ -22,7 +22,8 @@ router.get("/:cid", async (req, res) => {
     if (!cart) {
       res.status(404).json({ error: "Carrito No encontrado" });
     } else {
-      res.json({ message: cart }); //Cambiarlo por un res.render('carts.handlebars', {cart});
+      //res.json({ message: cart });
+      res.render('carts.handlebars', {cart});
     }
   } catch (error) {
     res.json({ message: error });
