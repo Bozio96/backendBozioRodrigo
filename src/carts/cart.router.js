@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const CartManager = require("../dao/CartManager");
 const ProductManager = require("../dao/ProductManager");
-/* const Carts = require('../dao/models/Carts.model'); */
 const router = Router();
 const pm = new ProductManager("/products.json");
 const cm = new CartManager("./files/cart.json", pm);
@@ -15,20 +14,6 @@ router.post("/", async (req, res) => {
     res.json({ message: error });
   }
 });
-/* router.post('/', async (req,res)=>{
-  try {
-    const { prod, quantity } = req.body
-    const newCartInfo = {
-        prod,
-        quantity
-    }
-
-    await cm.createCartDB(newCartInfo)
-    res.status(201).json({message: 'Carrito creado con exito'})
-  } catch (error) {
-    res.json({message: error})
-  }
-}) */
 
 router.get("/:cid", async (req, res) => {
   try {
@@ -94,7 +79,7 @@ router.put("/:cid", async (req, res) => {
   } catch (error) {
     res.json({ message: error });
   }
-}); //NO funciona
+}); //Repite productos
 
 router.put("/:cid/products/:pid", async (req, res) => {
   try {

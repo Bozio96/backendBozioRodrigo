@@ -31,13 +31,13 @@ class CartManager {
         ...prodInfo,
         quantity,
       };
-      if (cart.products.some((i) => i.id === prodInfo.id)) {
+      if (cart.productos.some((i) => i.id === prodInfo.id)) {
         await Carts.updateOne(
           { _id: cartId, "products.id": prodInfo.id },
           { $inc: { "products.$.quantity": quantity } }
         );
       } else {
-        await Carts.updateOne({ $push: { products: newProduct } });
+        await Carts.updateOne({ $push: { productos: newProduct } });
         return true;
       }
 
@@ -46,36 +46,32 @@ class CartManager {
       return error;
     }
   }
-
   //NUEVOS METODOS
- /*  async removeProductDB(cartId, productId) {
-    try {
-      const carrito = await this.getCartDBbyId(cartId);
-      console.log(carrito);
-
-      return true;
-    } catch (error) {
-      throw error;
-    }
-  } */
-
   async updateCartDB(cartId, products) {
     try {
+      const cart = await Carts.findById(cartId);
+      const newProducts = [];
+  
+      console.log(products)
+      products.forEach(product => {
+        const index = cart.productos.findIndex(p => p.product === product._id);
+  
+        if (index !== -1) {
+          cart.productos[index].quantity += product.quantity;
+        } else {
+          cart.productos.push(product);
+        }
+  
+        newProducts.push(cart.productos[index]);
+      });
 
-      console.log(products) //Hasta ahora aca estoy trayendo un array
-      //Lo que se puede hacer es guardar ese array en una variable, hacer un push al cart y luego guardar todo
-      //con un save
-      const cart = await Carts.findByIdAndUpdate(
-        cartId,
-        { products },
-        { new: true }
-      )
-
-      return cart;
+      await cart.save();
+  
+      return newProducts;
     } catch (error) {
       throw error;
     }
-  } //NO FUNCIONA
+  }
 
   async updateCartItem(cartId, productId, quantity) {
     try {
@@ -105,7 +101,7 @@ class CartManager {
   }
   async updateProductDB(cartId, productId, quantity) {
     try {
-      const cart = await Cart.findOneAndUpdate(
+      const cart = await Carts.findOneAndUpdate(
         { _id: cartId, "products.product": productId },
         { $set: { "products.$.quantity": quantity } },
         { new: true }
@@ -130,20 +126,6 @@ class CartManager {
       throw error;
     }
   }
-
- /*  async clearCartDB(cartId) {
-    try {
-      const cart = await Cart.findByIdAndUpdate(
-        cartId,
-        { products: [] },
-        { new: true }
-      ).populate("products.product");
-
-      return cart;
-    } catch (error) {
-      throw error;
-    }
-  } */
 
   //------------------FS---------------------------------------------
   addProductToCart(cartId, productId, quantity) {

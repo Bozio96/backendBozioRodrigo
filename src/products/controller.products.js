@@ -15,9 +15,9 @@ router.get('/', async (req,res)=>{
 
       const result = await pm.buscarConPaginacion(limit, page, category, sort);
 
-      res.json({
+      const data = {
         status: "success",
-        payload: result.products,
+        payload: result.products, //Array de productos
         totalPages: result.totalPages,
         prevPage: result.prevPage,
         nextPage: result.nextPage,
@@ -26,8 +26,20 @@ router.get('/', async (req,res)=>{
         hasNextPage: result.hasNextPage,
         prevLink: result.hasPrevPage ? `http://${req.headers.host}/api/products?page=${result.prevPage}&limit=${limit}&sort=${sort}&query=${category}` : null,
         nextLink: result.hasNextPage ? `http://${req.headers.host}/api/products?page=${result.nextPage}&limit=${limit}&sort=${sort}&query=${category}` : null
-      })
-     
+      }
+
+     res.render('products.handlebars', {
+      products: data.payload,
+      totalPages: data.totalPages,
+      prevPage: data.prevPage,
+      nextPage: data.nextPage,
+      page: data.page,
+      hasPrevPage: data.hasPrevPage,
+      hasNextPage: data.hasNextPage,
+      prevLink: data.prevLink,
+      nextLink: data.nextLink,
+     })
+
   } catch (error) {
     res.json({status: "error", payload: error.message})
   }
