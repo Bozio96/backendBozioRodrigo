@@ -198,3 +198,23 @@ router.delete('/:pid', (req, res) => {
   }); */
 
 module.exports = router
+
+//Esto copiarlo en un controller-users mas adelante.
+/* 
+const {Router} = require('express');
+
+const router = Router()
+
+router.get('/session', (req,res)=>{
+  if(req.session.counter){
+    req.session.counter++
+    return res.json({message: `Ingresaste ${req.session.counter} veces`})
+  }
+
+  req.session.counter = 1;
+  req.session.role = "admin";
+  req.session.status = true;
+  res.json({message: 'Wellcome'})
+})
+
+module.exports = router */

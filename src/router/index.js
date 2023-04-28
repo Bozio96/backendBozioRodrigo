@@ -1,3 +1,5 @@
+const authController = require('../auth/controller.auth')
+const usersController = require('../users/controller.users')
 const productsRouter = require('../products/controller.products')
 const cartRouter = require('../carts/cart.router')
 /* const todosLosProductos = require('../products/todosLosProductos.router') */
@@ -6,17 +8,12 @@ const messagesRouter = require('../messages/controller.messages')
 
 const router = app =>{
     app.use('/', productsRouter) //Para que muestre algo al principio
+    
+    app.use('/auth', authController) //Login
+    app.use('/users', usersController);
+
     app.use('/api/products', productsRouter); 
-    //MODIFICAR: 
-    //(?query=filtro) 
-    //Los productos se deben buscar por categoria o disponibilidad (stock > 0)
     app.use('/api/carts', cartRouter);
-    //MODIFICAR:
-    //DELETE: /:cid/products/:pid --- eliminar del carrito, el producto seleccionado.
-    //PUT: /:cid --- actualizar el carrito con un array de productos
-    //PUT: /:cid/products/:pid --- actualizar solo la cantidad pasada por req.body
-    //DELETE: /:cid --- vaciar el carrito, no eliminarlo
-    //GET: /:cid --- el id del producto debe hacer referencia a products. usar "populate"
     app.use('/api/messages', messagesRouter)
     /* app.use('/', todosLosProductos); */
     /* app.use('/realtimeproducts', realTimeProducts) */

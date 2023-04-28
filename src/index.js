@@ -1,17 +1,19 @@
 const express = require('express')
-const {port} = require('./config/app.config')
 const handlebars = require('express-handlebars');
 const cookieParser = require('cookie-parser');
-const mongoConnect = require('../db');
+const session = require('express-session')
+const MongoStore = require('connect-mongo')
+
 const {Server} = require('socket.io')
+const {port} = require('./config/app.config')
+const {dbAdmin, dbPassword, dbHost, dbName2} = require('./config/db.config')
+const mongoConnect = require('../db');
 const productManager = require('./dao/ProductManager');
 const MessagesDao = require('./dao/Messages.dao')
+const router = require('./router');
 
 const pm = new productManager('./files/products.json');
-
 const Messages = new MessagesDao()
-
-const router = require('./router');
 const messages = []
 
 const app = express()
@@ -20,6 +22,24 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
+
+//Midleware para sessions
+app.use(
+    session({
+        store: MongoStore.create({
+            mongoUrl: `mongodb+srv://${dbAdmin}:${dbPassword}@${dbHost}/${dbName2}?retryWrites=true&w=majority`,
+            mongoOptions: {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            },
+            ttl: 15,
+        }) ,
+        secret: "hola",
+        resave: false,
+        saveUninitialized: false,
+    })
+)
+
 
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 const hbs = handlebars.create({
