@@ -1,3 +1,4 @@
+const viewsTemplateController = require('../viewsTemplate/controller.viewsTemplate')
 const authController = require('../auth/controller.auth')
 const usersController = require('../users/controller.users')
 const productsRouter = require('../products/controller.products')
@@ -7,10 +8,9 @@ const cartRouter = require('../carts/cart.router')
 const messagesRouter = require('../messages/controller.messages')
 
 const router = app =>{
-    app.use('/', productsRouter) //Para que muestre algo al principio
-    
+    app.use('/', viewsTemplateController)       
     app.use('/auth', authController) //Login
-    app.use('/users', usersController);
+    app.use('/users', usersController); //Registro
 
     app.use('/api/products', productsRouter); 
     app.use('/api/carts', cartRouter);
