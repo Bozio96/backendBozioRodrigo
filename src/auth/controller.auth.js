@@ -12,7 +12,7 @@ router.post('/', async(req,res)=>{
         }        
 
         if(user.password !== password){
-            return res.status(400).json({status: 'error', error: 'Datos erroneos2'})
+            return res.status(400).json({status: 'error', error: 'Datos erroneos'})
         }
 
         req.session.user = {

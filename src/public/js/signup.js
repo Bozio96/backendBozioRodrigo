@@ -8,7 +8,7 @@ form.addEventListener('submit', (e)=>{
 
     data.forEach((value,key)=>obj[key]=value) //Esa notacion de corchetes crea una nueva clave con el nombre que le pasamos por parametro
 
-    const url = '/users';
+    const url = '/api/users';
     const headers = {
         'Content-Type': 'application/json',
     }
@@ -21,6 +21,9 @@ form.addEventListener('submit', (e)=>{
         body
     })
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => {
+        console.log(data);
+        window.location.href = '/api/login'
+    })
     .catch(error => console.log(error))
 })

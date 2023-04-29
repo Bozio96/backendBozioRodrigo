@@ -13,7 +13,7 @@ router.post('/', async(req,res)=>{
             age,
             password //Mas adelante esto deberia estar encriptado, no se deberia pasar asi en un proyecto real
         }
-        const user = await Users.create(newUserInfo)
+        await Users.create(newUserInfo)
 
         res.status(201).json({status: 'success', message: `Usuario con email ${email}, creado con exito`})
     } catch (error) {
@@ -21,5 +21,7 @@ router.post('/', async(req,res)=>{
         res.status(500).json({status: 'error', error: 'Internal server error'})
     }
 })
+
+
 
 module.exports = router;

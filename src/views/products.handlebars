@@ -1,8 +1,13 @@
-<h1>Productos</h1>
+<h1>Bienvenido: {{user.first_name}} {{user.last_name}}</h1>
+<p>Edad: {{user.age}} años</p>
+<p>Correo: {{user.email}}</p>
+<p>Contraseña: Te la creiste 😂😂😂</p>
+
+<h2>Productos</h2>
 <ul>
 {{#each products}}
   <li>
-    <h2>Title: {{this.title}}</h2>
+    <h3>Title: {{this.title}}</h3>
     <p>Description: {{this.description}}</p>
     <p>Price: {{this.price}}</p>
     <p>Category: {{this.category}}</p>
@@ -23,4 +28,8 @@
   {{#if nextLink}}
   <a href="{{nextLink}}">Pagina siguiente</a>
   {{/if}}
+</div>
+
+<div>
+  <button>Cerrar sesion</button>
 </div>

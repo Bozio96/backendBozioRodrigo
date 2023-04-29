@@ -8,7 +8,7 @@ form.addEventListener('submit', (e)=>{
 
     data.forEach((value,key)=>obj[key]=value)
 
-    const url = '/auth';
+    const url = '/api/auth';
     const headers = {
         'Content-Type': 'application/json'
     }
@@ -21,7 +21,10 @@ form.addEventListener('submit', (e)=>{
         body,
     })
     .then(res=>res.json())
-    .then(data=>console.log(data))
+    .then(data=>{
+        console.log(data);
+        window.location.href = '/api/products';
+    })
     .catch(error=>console.log(error))
 })
 

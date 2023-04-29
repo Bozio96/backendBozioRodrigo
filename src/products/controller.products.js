@@ -2,12 +2,14 @@ const {Router} = require('express');
 const productManager = require('../dao/ProductManager');
 const pm = new productManager('/products.json')
 const uploader = require('../utils/multer.utils');
+const privateAccess = require('../middlewares/privateAccess.middleware');
 const router = Router();
 
 
 //-------------------DB----------------------------------
-router.get('/', async (req,res)=>{
+router.get('/', privateAccess, async (req,res)=>{
   try {
+      const {user} = req.session
       const limit = parseInt(req.query.limit)||10;
       const page = parseInt(req.query.page)||1;
       /* const query = req.query.query || ''; */
@@ -32,6 +34,7 @@ router.get('/', async (req,res)=>{
       }
 
      res.render('products.handlebars', {
+      user,
       products: data.payload,
       totalPages: data.totalPages,
       prevPage: data.prevPage,

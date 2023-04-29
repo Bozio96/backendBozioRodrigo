@@ -11,6 +11,11 @@ const collectionSchema = new mongoose.Schema({
     },
     age: Number,
     password: String,
+    role: {
+        type: String,
+        enum: ['admin', 'user'],
+        default: 'user',
+    }
 })
 
 const Users = mongoose.model(collectionName, collectionSchema);

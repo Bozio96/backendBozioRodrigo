@@ -8,9 +8,12 @@ const cartRouter = require('../carts/cart.router')
 const messagesRouter = require('../messages/controller.messages')
 
 const router = app =>{
-    app.use('/', viewsTemplateController)       
-    app.use('/auth', authController) //Login
-    app.use('/users', usersController); //Registro
+    //Esta maneja las 2 siguientes
+    app.use('/', viewsTemplateController)
+
+    //Estas 2 no tienen GET por eso tira error       
+    app.use('/api/auth', authController) //Login
+    app.use('/api/users', usersController); //Registro
 
     app.use('/api/products', productsRouter); 
     app.use('/api/carts', cartRouter);

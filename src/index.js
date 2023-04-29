@@ -32,7 +32,7 @@ app.use(
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             },
-            ttl: 15,
+            ttl: 60,
         }) ,
         secret: "hola",
         resave: false,
