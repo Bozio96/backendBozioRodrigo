@@ -114,6 +114,17 @@ router.delete('/:pid', async(req,res)=>{
   }
 })
 
+//Cerrar sesion
+router.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error(err);
+      } else {
+        res.redirect('/');
+      }
+    });
+  });
+
 //Metodo Privado
 /* router.delete('/deleteAll', async (req,res)=>{
   await pm.eliminarTodos()

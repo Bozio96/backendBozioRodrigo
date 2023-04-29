@@ -13,7 +13,6 @@ router.get('/api/login', publicAccess, (req,res)=>{
 })
 
 router.get('/', privateAccess, (req,res)=>{
-     //Usar esto en otro lado
     res.redirect('/api/products')
 })
 

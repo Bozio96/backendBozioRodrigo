@@ -29,11 +29,11 @@ router.post('/', async(req,res)=>{
     }
 })
 
-router.get('/logout', (req,res)=>{
+/* router.get('/logout', (req,res)=>{
     req.session.destroy(error=>{
         if(error) return res.json({error})
-        res.redirect('/login')
+        res.redirect('/api/login')
     })
-})
+}) */
 
 module.exports = router
