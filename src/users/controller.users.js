@@ -22,6 +22,10 @@ router.post('/', async(req,res)=>{
     }
 })
 
+router.get('/redirect', (req,res)=>{
+    res.redirect('/api/signup')
+})
+
 
 
 module.exports = router;

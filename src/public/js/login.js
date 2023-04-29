@@ -1,4 +1,5 @@
 const form = document.getElementById('loginForm')
+const btn = document.getElementById('redirectSignup')
 
 form.addEventListener('submit', (e)=>{
     e.preventDefault()
@@ -28,4 +29,18 @@ form.addEventListener('submit', (e)=>{
     .catch(error=>console.log(error))
 })
 
+
+
+btn.addEventListener('click', ()=>{
+    const url = '/api/login/redirect'
+    const method = 'GET';
+
+    fetch(url, {method})
+    .then((res)=>{
+        window.location.href = '/api/signup';
+    })
+    .catch((err)=>{
+        console.log(err);
+    })
+})
 

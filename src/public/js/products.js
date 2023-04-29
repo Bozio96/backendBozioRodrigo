@@ -2,7 +2,7 @@ const form = document.getElementById('cerrarSesion');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const url = '/api/products/logout' //ver esta url
+    const url = '/api/products/logout'
     const method = 'POST';
 
 
