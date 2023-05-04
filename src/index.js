@@ -3,6 +3,7 @@ const handlebars = require('express-handlebars');
 const cookieParser = require('cookie-parser');
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
+const passport = require('passport');
 
 const {Server} = require('socket.io')
 const {port} = require('./config/app.config')
@@ -11,6 +12,7 @@ const mongoConnect = require('../db');
 const productManager = require('./dao/ProductManager');
 const MessagesDao = require('./dao/Messages.dao')
 const router = require('./router');
+const initializePassport = require('./config/passport.config')
 
 const pm = new productManager('./files/products.json');
 const Messages = new MessagesDao()
@@ -40,6 +42,9 @@ app.use(
     })
 )
 
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 const hbs = handlebars.create({

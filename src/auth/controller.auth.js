@@ -1,10 +1,34 @@
 const {Router} = require('express');
 const Users = require('../dao/models/Users.model')
+const { passwordValidate } = require('../utils/cryptPassword.utils')
+const passport = require('passport')
 
 const router = Router();
 
-router.post('/', async(req,res)=>{
+router.post('/',passport.authenticate('login', {failureRedirect: '/auth/faillogin'}) ,async(req,res)=>{
     try {
+        if(!req.user) return res.status(401).json({status: 'error', error: 'Usuario y contraseña no coinciden'})
+
+        req.session.user = {
+            first_name: req.user.first_name,
+            last_name: req.user.last_name,
+            email: req.user.email,
+        }
+
+        res.json({status: 'success', message: 'Sesion iniciada'})
+
+/* 
+        CON HASHEO - SIN PASSPORT
+        const {email,password} = req.body;
+        const user = Users.findOne({email});
+        if(!user) return res.status(400).json({error: 'Datos erroneos'})
+
+        const isPasswordValid = passwordValidate(password, user);
+        if(!isPasswordValid) return res.status(401).json({error:'Datos erroneos'})
+
+        res.json({message: 'success login'}) */
+
+/*      SIN HASHEO - Entrega del login simple   
         const {email, password} = req.body
 
         if(email === 'adminCoder@coder.com' && password === 'adminCod3r123'){
@@ -36,13 +60,19 @@ router.post('/', async(req,res)=>{
             }
            
             res.json({status: 'success', message: 'Sesion iniciada'})
-        } 
+        }  */
        
     } catch (error) {
         console.log(error)
         res.status(500).json({status: 'error', error: 'Internal error server'})
     }
 })
+
+router.get('/faillogin', (req,res)=>{
+    console.log('Falló estrategia de login');
+    res.json({error: 'Failed login'})
+})
+
 
 router.get('/redirect', (req,res)=>{
     res.redirect('/api/login')
