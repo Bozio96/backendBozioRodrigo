@@ -17,8 +17,7 @@ router.post('/',passport.authenticate('login', {failureRedirect: '/auth/faillogi
 
         res.json({status: 'success', message: 'Sesion iniciada'})
 
-/* 
-        CON HASHEO - SIN PASSPORT
+/*      CON HASHEO - SIN PASSPORT
         const {email,password} = req.body;
         const user = Users.findOne({email});
         if(!user) return res.status(400).json({error: 'Datos erroneos'})
@@ -67,6 +66,19 @@ router.post('/',passport.authenticate('login', {failureRedirect: '/auth/faillogi
         res.status(500).json({status: 'error', error: 'Internal error server'})
     }
 })
+
+router.get('/github', 
+    passport.authenticate('github', {scope: ['user:email']}),
+    async (req,res)=>{}
+)
+
+router.get('/githubcallback',
+    passport.authenticate('github', {failureRedirect: '/login'}),
+    async(req,res)=>{
+        req.session.user = req.user;
+        res.redirect('/');
+    }
+)
 
 router.get('/faillogin', (req,res)=>{
     console.log('Falló estrategia de login');
