@@ -1,17 +1,14 @@
-const viewsTemplateController = require('../viewsTemplate/controller.viewsTemplate')
-const authController = require('../auth/controller.auth')
-const usersController = require('../users/controller.users')
-const productsRouter = require('../products/controller.products')
-const cartRouter = require('../carts/cart.router')
-/* const todosLosProductos = require('../products/todosLosProductos.router') */
-/* const realTimeProducts = require('../products/realTimeProducts.router') */
-const messagesRouter = require('../messages/controller.messages')
+const viewsTemplateController = require('../controllers/controller.viewsTemplate')
+const authController = require('../controllers/controller.auth')
+const usersController = require('../controllers/controller.users')
+const productsRouter = require('../controllers/controller.products')
+const cartRouter = require('../controllers/controller.cart')
+const messagesRouter = require('../controllers/controller.messages')
 
 const router = app =>{
     //Esta maneja las 2 siguientes
     app.use('/', viewsTemplateController)
-
-    //Estas 2 no tienen GET por eso tira error       
+  
     app.use('/api/auth', authController) //Login
     app.use('/api/users', usersController); //Registro
 

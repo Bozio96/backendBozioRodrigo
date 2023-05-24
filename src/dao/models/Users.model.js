@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Carts = require('./Carts.model');
 
 const collectionName = 'user';
 
@@ -11,6 +12,10 @@ const collectionSchema = new mongoose.Schema({
     },
     age: Number,
     password: String,
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Carts
+    }, //Populate("cart.carts")
     role: {
         type: String,
         enum: ['admin', 'user'],

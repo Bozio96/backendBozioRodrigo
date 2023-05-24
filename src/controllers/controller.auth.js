@@ -13,6 +13,8 @@ router.post('/',passport.authenticate('login', {failureRedirect: '/auth/faillogi
             first_name: req.user.first_name,
             last_name: req.user.last_name,
             email: req.user.email,
+            age: req.user.age,
+            role: req.user.role
         }
 
         res.json({status: 'success', message: 'Sesion iniciada'})
