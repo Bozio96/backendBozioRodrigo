@@ -1,25 +1,33 @@
-const {Router} = require('express');
-const Users = require('../dao/models/Users.model')
-const { passwordValidate } = require('../utils/cryptPassword.utils')
-const passport = require('passport')
+const { Router } = require("express");
+const passport = require("passport");
 
 const router = Router();
 
-router.post('/',passport.authenticate('login', {failureRedirect: '/auth/faillogin'}) ,async(req,res)=>{
+router.post(
+  "/",
+  passport.authenticate("login", { failureRedirect: "/auth/faillogin" }),
+  async (req, res) => {
     try {
-        if(!req.user) return res.status(401).json({status: 'error', error: 'Usuario y contraseña no coinciden'})
+      if (!req.user)
+        return res
+          .status(401)
+          .json({
+            status: "error",
+            error: "Usuario y contraseña no coinciden",
+          });
 
-        req.session.user = {
-            first_name: req.user.first_name,
-            last_name: req.user.last_name,
-            email: req.user.email,
-            age: req.user.age,
-            role: req.user.role
-        }
+      req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.email,
+        age: req.user.age,
+        role: req.user.role,
+        cartId: req.user.cartId
+      };
 
-        res.json({status: 'success', message: 'Sesion iniciada'})
+      res.json({ status: "success", message: "Sesion iniciada" });
 
-/*      CON HASHEO - SIN PASSPORT
+      /*      CON HASHEO - SIN PASSPORT
         const {email,password} = req.body;
         const user = Users.findOne({email});
         if(!user) return res.status(400).json({error: 'Datos erroneos'})
@@ -29,7 +37,7 @@ router.post('/',passport.authenticate('login', {failureRedirect: '/auth/faillogi
 
         res.json({message: 'success login'}) */
 
-/*      SIN HASHEO - Entrega del login simple   
+      /*      SIN HASHEO - Entrega del login simple   
         const {email, password} = req.body
 
         if(email === 'adminCoder@coder.com' && password === 'adminCod3r123'){
@@ -62,34 +70,35 @@ router.post('/',passport.authenticate('login', {failureRedirect: '/auth/faillogi
            
             res.json({status: 'success', message: 'Sesion iniciada'})
         }  */
-       
     } catch (error) {
-        console.log(error)
-        res.status(500).json({status: 'error', error: 'Internal error server'})
+      console.log(error);
+      res.status(500).json({ status: "error", error: "Internal error server" });
     }
-})
+  }
+);
 
-router.get('/github', 
-    passport.authenticate('github', {scope: ['user:email']}),
-    async (req,res)=>{}
-)
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  async (req, res) => {}
+);
 
-router.get('/githubcallback',
-    passport.authenticate('github', {failureRedirect: '/login'}),
-    async(req,res)=>{
-        req.session.user = req.user;
-        res.redirect('/');
-    }
-)
+router.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res) => {
+    req.session.user = req.user;
+    res.redirect("/");
+  }
+);
 
-router.get('/faillogin', (req,res)=>{
-    console.log('Falló estrategia de login');
-    res.json({error: 'Failed login'})
-})
+router.get("/faillogin", (req, res) => {
+  console.log("Falló estrategia de login");
+  res.json({ error: "Failed login" });
+});
 
+router.get("/redirect", (req, res) => {
+  res.redirect("/api/login");
+});
 
-router.get('/redirect', (req,res)=>{
-    res.redirect('/api/login')
-})
-
-module.exports = router
+module.exports = router;

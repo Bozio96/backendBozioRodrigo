@@ -3,6 +3,7 @@ const local = require('passport-local');
 const GithubStrategy = require('passport-github2')
 const Users = require('../dao/models/Users.model');
 const {createHash, passwordValidate} = require('../utils/cryptPassword.utils');
+const usersCreate = require('../dao/Users.dao');
 
 const LocalStrategy = local.Strategy;
 
@@ -18,14 +19,17 @@ const initializePassport = ()=>{
                         console.log('Usuario ya existe');
                         return done(null,false);
                     }
+
                     const newUserInfo = {
                         first_name,
                         last_name,
                         email,
                         age,
-                        password: createHash(password)
+                        password: createHash(password),
                     };
-                    const newUser = await Users.create(newUserInfo)
+                    
+                    const newUser = usersCreate(newUserInfo)
+
                     return done(null, newUser);
 
                 } catch (error) {

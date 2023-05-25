@@ -12,10 +12,10 @@ const collectionSchema = new mongoose.Schema({
     },
     age: Number,
     password: String,
-    cart: {
+    cartId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: Carts
-    }, //Populate("cart.carts")
+    }, //Populate("cartId.carts")
     role: {
         type: String,
         enum: ['admin', 'user'],
