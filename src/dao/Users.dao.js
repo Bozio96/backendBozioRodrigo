@@ -1,4 +1,4 @@
-const User = require('../dao/models/Users.model')
+/* const User = require('../dao/models/Users.model')
 const Cart = require('../dao/models/Carts.model')
 
 async function usersCreate(userInfo){
@@ -23,6 +23,18 @@ async function usersCreate(userInfo){
     } catch (error) {
         return error
     }
-} 
+}  */
+
+const UserRepository = require('./repository/users.repository')
+
+async function usersCreate(userInfo){
+    try {
+        const userRepository = new UserRepository()
+        const user = await userRepository.createUser(userInfo)
+        return user 
+    } catch (error) {
+        return error
+    }
+}
 
 module.exports = usersCreate

@@ -3,6 +3,7 @@ const productManager = require('../dao/ProductManager');
 const pm = new productManager('/products.json')
 const uploader = require('../utils/multer.utils');
 const privateAccess = require('../middlewares/privateAccess.middleware');
+const adminAccess = require('../middlewares/adminAccess.middleware')
 const router = Router();
 
 
@@ -53,7 +54,7 @@ router.get('/', privateAccess, async (req,res)=>{
   }
 })
 
-router.post('/', /* uploader.single('file'),  */async (req,res)=>{
+router.post('/', adminAccess ,async (req,res)=>{
   try {
     const {title, description, code, price, stock, category, thumbnails} = req.body
     const newProductInfo = {
@@ -78,6 +79,7 @@ router.post('/', /* uploader.single('file'),  */async (req,res)=>{
   }
 })
 
+
 router.get('/:pid', async (req,res)=>{
   try {
     const {pid} = req.params;
@@ -92,7 +94,7 @@ router.get('/:pid', async (req,res)=>{
   }
 }) //Corregir los codigos de estado, si falla devuelve 200
 
-router.patch('/:pid', uploader.single('file'), async(req,res)=>{
+router.patch('/:pid', adminAccess, uploader.single('file'), async(req,res)=>{
   try{
     const {pid} = req.params;
     const data = req.body
@@ -104,7 +106,7 @@ router.patch('/:pid', uploader.single('file'), async(req,res)=>{
   }
 })
 
-router.delete('/:pid', async(req,res)=>{
+router.delete('/:pid', adminAccess, async(req,res)=>{
   try {
     const {pid} = req.params;
     pm.eliminarUno(pid);

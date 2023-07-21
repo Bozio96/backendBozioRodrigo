@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const passport = require('passport');
+const morgan = require('morgan')
 
 const {Server} = require('socket.io')
 const {port} = require('./config/app.config')

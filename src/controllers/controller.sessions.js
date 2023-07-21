@@ -1,16 +1,18 @@
 const {Router} = require('express')
 const router = Router()
+const UserDTO = require('../dao/dto/users.dto')
+const privateAccess = require('../middlewares/privateAccess.middleware')
 
-router.get('/current', (req, res) => {
-  try {
-    if (req.session && req.session.user) {
-      const session = req.session
-      return res.status(200).json(session)
-    }
-    return res.status(401).json({message: 'Not authenticated'})
+router.get('/current', privateAccess ,(req, res) => {
+  const session = UserDTO(req.session)
+  return res.status(200).json(session)
+  /* try {
+    const session = UserDTO(req.session)
+    return res.status(200).json(session)
+   
   } catch (error) {
     return res.status(500).json({ error: 'Internal Server Error' })
-  }
+  } */
 })
 
 module.exports = router

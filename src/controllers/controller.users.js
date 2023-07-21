@@ -1,7 +1,7 @@
 const {Router} = require('express');
-const Users = require('../dao/models/Users.model');
-const {createHash} = require('../utils/cryptPassword.utils')
 const passport = require('passport')
+/* const Users = require('../dao/models/Users.model');
+const {createHash} = require('../utils/cryptPassword.utils') */
 
 const router = Router()
 

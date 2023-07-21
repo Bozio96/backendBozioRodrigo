@@ -1,10 +1,11 @@
 const {Router} = require('express');
-const ChatsDao = require('../dao/Messages.dao')
+const ChatsDao = require('../dao/Messages.dao');
+const privateAccess = require('../middlewares/privateAccess.middleware');
 
 const router = Router();
 const Chats = new ChatsDao()
 
-router.get('/', async(req,res)=>{
+router.get('/', async(req,res)=>{ //AGREGAR UN USERACCESS
     try {
         const chats = await Chats.getChats()
         res.render('chat.handlebars', {chats, title:"Chat"} )
@@ -13,7 +14,7 @@ router.get('/', async(req,res)=>{
     }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', privateAccess, async (req, res) => {
     try {
         const { user, message } = req.body
         const msj = await Chats.create(user, message)

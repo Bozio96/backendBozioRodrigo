@@ -78,6 +78,7 @@ class CartManager {
       const cart = await Carts.findById(cartId);
       const item = cart.productos.find(p => p.product == productId);
       if (!item) throw new Error("Producto no está en carrito");
+      //Hacer control de stock con modelo de productos
       item.quantity = quantity;
       const updatedCart = await cart.save();
       return updatedCart;
@@ -179,5 +180,19 @@ class CartManager {
     fs.writeFileSync(this.path, JSON.stringify(carts));
   }
 }
-
 module.exports = CartManager;
+
+
+const CartsRepository = require("./repository/carts.repository");
+
+async function saveProductInCart(cart, product){
+  try {
+    const cartsRepository = new CartsRepository()
+    return cartsRepository.saveProduct(cart, product)
+  } catch (error) {
+    return error
+  }
+}
+
+module.exports = saveProductInCart
+
