@@ -2,7 +2,10 @@
 <p>Edad: {{user.age}} años</p>
 <p>Correo: {{user.email}}</p>
 <p>Rol: {{user.role}}</p>
-<p>Contraseña: Te la creiste 😂😂😂</p>
+
+<form method="get" action="/api/carts/{{user.cartId}}">
+      <button type="submit">Ir a tu carrito</button>
+</form>
 
 <h2>Productos</h2>
 <ul>
@@ -12,6 +15,13 @@
     <p>Description: {{this.description}}</p>
     <p>Price: {{this.price}}</p>
     <p>Category: {{this.category}}</p>
+    <p>Stock: {{this.stock}}</p>
+    <p>ID para pruebas: {{this._id}}</p>
+
+    <form method="post" action="/api/carts/{{../user.cartId}}/products/{{this._id}}">
+      <button type="submit">Agregar al carrito</button>
+    </form>
+
    {{!--  {{#if ../cartId}}
     <form method="POST" action="/api/carts/{{../cartId}}/products/{{this._id}}">
       <input type="hidden" name="product_id" value="{{_id}}">

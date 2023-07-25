@@ -1,7 +1,5 @@
 const {Router} = require('express');
 const passport = require('passport')
-/* const Users = require('../dao/models/Users.model');
-const {createHash} = require('../utils/cryptPassword.utils') */
 
 const router = Router()
 
@@ -13,23 +11,6 @@ async(req,res)=>{
         console.log(error);
         res.status(500).json({status: 'error', error: 'Internal server error'})
     }    
-    
-    /* try {
-        const {first_name, last_name, email, age, password} = req.body
-        const newUserInfo = {
-            first_name,
-            last_name,
-            email,
-            age,
-            password: createHash(password),
-        }
-        await Users.create(newUserInfo)
-
-        res.status(201).json({status: 'success', message: `Usuario con email ${email}, creado con exito`})
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({status: 'error', error: 'Internal server error'})
-    } */
 })
 
 router.get('/failregister', (req,res)=>{

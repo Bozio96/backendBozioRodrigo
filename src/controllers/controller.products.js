@@ -1,5 +1,5 @@
 const {Router} = require('express');
-const productManager = require('../dao/ProductManager');
+const productManager = require('../dao/Products.dao');
 const pm = new productManager('/products.json')
 const uploader = require('../utils/multer.utils');
 const privateAccess = require('../middlewares/privateAccess.middleware');

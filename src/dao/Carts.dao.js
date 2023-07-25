@@ -1,7 +1,6 @@
-const fs = require("fs");
 const Carts = require("./models/Carts.model");
 
-class CartManager {
+class CartsDAO {
   constructor(path, pm) {
     this.path = path;
     this.productManager = pm;
@@ -46,7 +45,7 @@ class CartManager {
       return error;
     }
   }
-  //NUEVOS METODOS
+
   async updateCartDB(cartId, products) {
     try {
       const cart = await Carts.findById(cartId);
@@ -129,7 +128,7 @@ class CartManager {
   }
 
   //------------------FS---------------------------------------------
-  addProductToCart(cartId, productId, quantity) {
+  /* addProductToCart(cartId, productId, quantity) {
     const carts = this.getCartsArchivo();
     const cartIndex = carts.findIndex((c) => c.id === cartId);
 
@@ -178,12 +177,12 @@ class CartManager {
 
   saveCartsArchivo(carts) {
     fs.writeFileSync(this.path, JSON.stringify(carts));
-  }
+  } */
 }
-module.exports = CartManager;
+module.exports = CartsDAO;
 
 
-const CartsRepository = require("./repository/carts.repository");
+/* const CartsRepository = require("./repository/carts.repository");
 
 async function saveProductInCart(cart, product){
   try {
@@ -194,5 +193,5 @@ async function saveProductInCart(cart, product){
   }
 }
 
-module.exports = saveProductInCart
+module.exports = saveProductInCart */
 

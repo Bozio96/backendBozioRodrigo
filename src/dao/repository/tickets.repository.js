@@ -10,6 +10,7 @@ class TicketsRepositoy {
         for(let i = 0; i < cart.productos.length; i++){
             const item = cart.productos[i];
 
+            //Si el producto seleccionado tiene Stock lo procesa y lo retorna
             const product = await this.processItem(item, productsProcessed, productsNOProcessed)
             if(product){
                 const productQuantity = item.quantity;
@@ -29,10 +30,13 @@ class TicketsRepositoy {
             productsProcessed: productsProcessed
         })
 
-        return ticket
+        return {
+            ticket,
+            productsNOProcessed,
+        }
     }
 
-    //Controla si existe stock para procesarlo o no
+    //Controla si existe stock para procesarlo o no (De a uno en uno)
     processItem = async (item, productsProcessed, productsNOProcessed)=>{
         const productId = item.product._id;
         const productQuantity = item.quantity;

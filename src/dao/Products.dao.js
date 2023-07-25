@@ -1,7 +1,7 @@
 const fs = require("fs");
 const Products = require("./models/Products.model");
 
-class ProductManager {
+class ProductDAO {
   constructor(path) {
     this.path = path;
   }
@@ -107,7 +107,7 @@ class ProductManager {
   } */
 
   //------------------------FS-------------------------------------------------
-  addProduct(product) {
+  /* addProduct(product) {
     const products = this.getProductsArchivo();
     const lastProductId =
       products.length > 0 ? products[products.length - 1].id : 0;
@@ -173,9 +173,9 @@ class ProductManager {
       process.cwd() + "/src/files" + this.path,
       JSON.stringify(products)
     );
-  }
+  } */
 }
 
-module.exports = ProductManager;
+module.exports = ProductDAO;
 
 //COMPLETAR ESTE DAO

@@ -23,9 +23,12 @@ router.post(
         age: req.user.age,
         role: req.user.role,
         cartId: req.user.cartId
-      };
+      };  
+
 
       res.json({ status: "success", message: "Sesion iniciada" });
+
+      
 
       /*      CON HASHEO - SIN PASSPORT
         const {email,password} = req.body;

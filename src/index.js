@@ -10,7 +10,7 @@ const {Server} = require('socket.io')
 const {port} = require('./config/app.config')
 const {dbAdmin, dbPassword, dbHost, dbName2} = require('./config/db.config')
 const mongoConnect = require('../db');
-const productManager = require('./dao/ProductManager');
+const productManager = require('./dao/Products.dao');
 const MessagesDao = require('./dao/Messages.dao')
 const router = require('./router');
 const initializePassport = require('./config/passport.config')
@@ -35,11 +35,14 @@ app.use(
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             },
-            ttl: 60,
+            ttl: 60 * 60,
         }) ,
         secret: "hola",
         resave: false,
         saveUninitialized: false,
+        cookie: {
+            maxAge: 60 * 60 * 1000,
+        }
     })
 )
 

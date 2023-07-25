@@ -20,6 +20,7 @@ const initializePassport = ()=>{
                         return done(null,false);
                     }
 
+                   
                     const newUserInfo = {
                         first_name,
                         last_name,
@@ -27,8 +28,9 @@ const initializePassport = ()=>{
                         age,
                         password: createHash(password),
                     };
+
                     
-                    const newUser = usersCreate(newUserInfo)
+                    const newUser = await usersCreate(newUserInfo)
 
                     return done(null, newUser);
 
@@ -54,7 +56,25 @@ const initializePassport = ()=>{
                         console.log('Contraseña incorrecta');
                         return done(null,false);
                     }
-                    return done(null,user);
+
+                    //Modificaciones para la cookie
+                   /*  const userObject = {
+                        id: user._id,
+                        email: user.email,
+                        role: user.role,
+                    } */
+/* 
+                    if(user.role === "admin"){
+                        req.session.user = userObject
+                    }else{
+                        req.session.user = {
+                            id:user._id,
+                            email: user.email,
+                            role: 'user'
+                        }
+                    } */
+
+                    return done(null,user)
                 } catch (error) {
                     return done(error);
                 }

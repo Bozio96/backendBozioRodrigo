@@ -15,7 +15,7 @@ const router = app =>{
     app.use('/api/users', usersController); //Registro
 
     app.use('/api/products', productsRouter); 
-    app.use('/api/carts', privateAccess,cartRouter);
+    app.use('/api/carts', cartRouter);
     app.use('/api/messages', privateAccess, messagesRouter)
     app.use('/api/sessions', sessionsController)
     

@@ -1,4 +1,4 @@
-const {Router} = require('express');
+/* const {Router} = require('express');
 const productManager = require('../dao/ProductManager');
 const router = Router();
 const pm = new productManager('/products.json');
@@ -10,6 +10,6 @@ router.get('/', async(req,res)=>{
     await res.render('home.handlebars', {products, title:"Titulo Dinamico de prueba en index"})
 })
 
-module.exports = router
+module.exports = router */
 
 //CODIGO NO IMPLEMENTAADO EN ESTA ENTREGA

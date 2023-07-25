@@ -29,4 +29,4 @@ class UsersRepository {
     }
 }
 
-module.exports = {createUser}
+module.exports = UsersRepository

@@ -1,11 +1,12 @@
 const { Router } = require("express");
-const CartManager = require("../dao/CartManager");
-const ProductManager = require("../dao/ProductManager");
+const CartManager = require("../dao/Carts.dao");
+const ProductManager = require("../dao/Products.dao");
 const router = Router();
 const pm = new ProductManager("/products.json");
 const cm = new CartManager("./files/cart.json", pm);
+const checkData = require('../dao/Tickets.dao')
 const uuid = require('uuid');
-const privateAccess = require("../middlewares/privateAccess.middleware");
+const userAccess = require("../middlewares/userAccess.middleware");
 
 //----------------------DB-------------------------
 //Crear carrito vacio
@@ -19,7 +20,7 @@ router.post("/", async (req, res) => {
 });
 
 //Traer carrito por id     
-router.get("/:cid", async (req, res) => {
+router.get("/:cid", userAccess , async (req, res) => {
   try {
     const { cid } = req.params;
     const cart = await cm.getCartDBbyId(cid);
@@ -36,7 +37,7 @@ router.get("/:cid", async (req, res) => {
 });
 
 
-router.post("/:cid/products/:pid", privateAccess, async (req, res) => {
+router.post("/:cid/products/:pid", userAccess,async (req, res) => {
   try {
     const { cid, pid } = req.params;
 
@@ -114,24 +115,25 @@ router.delete("/:cid", async (req, res) => {
 });
 
 
-//-------------------NUEVO----------------------
-router.post('/:cid/purchase', async(req,res)=>{
+//-------------------Finaliza la compra---------------------
+router.get('/:cid/purchase', async(req,res)=>{
   try {
-    const sinStock = []
-    const conStock = []
-    const {cartId} = req.params;
-    const cart = cm.getCartDBbyId(cartId)
-    cart.productos.forEach(prod => {
-      if(prod.quantity <1){
-        sinStock.push(prod)
-      }else{
-        conStock.push(prod);
-      }
-    })
-    //for each no hace falta
-        
-    const email = req.user.email;
-    const code = uuid.v5()
+    const {cid} = req.params;
+    const cart = await cm.getCartDBbyId(cid) 
+    console.log(req.session) //La session si la lee pero viene solo la cookie
+    const email = req.user.email; //Para el desafio del carrito no me lee el user tampoco
+    const code = uuid.v4()
+
+    const dataCompra = await checkData(code, email, cart)
+    const newTicket = dataCompra.ticket
+    const productosNoProcesados = dataCompra.productsNOProcessed
+
+    if(productosNoProcesados.length > 0){
+      res.status(200).json({"Hay productos que no fueron procesados ":  productosNoProcesados,
+            "Ticket de compra": newTicket})
+    }else{
+      res.status(200).json({"Ticket de compra": newTicket})
+    }
 
   } catch (error) {
     console.log(error)
