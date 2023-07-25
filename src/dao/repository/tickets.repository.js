@@ -1,5 +1,6 @@
 const Tickets = require('../models/Tickets.model')
 const Products = require('../models/Products.model')
+const logger = require('../../utils/logger.utils')
 
 class TicketsRepositoy {
     proccessDataTicket = async (code, userEmail, cart)=>{
@@ -52,7 +53,8 @@ class TicketsRepositoy {
                 productsNOProcessed.push(product)
             }
         } catch (error) {
-            console.log(error)
+            logger.error('Error al procesar producto', error)
+            /* console.log(error) */
         }
     }
 }

@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const passport = require("passport");
+const logger = require("../utils/logger.utils");
 
 const router = Router();
 
@@ -25,7 +26,7 @@ router.post(
         cartId: req.user.cartId
       };  
 
-
+      logger.info('Sesion iniciada con éxito')
       res.json({ status: "success", message: "Sesion iniciada" });
 
       
@@ -74,7 +75,7 @@ router.post(
             res.json({status: 'success', message: 'Sesion iniciada'})
         }  */
     } catch (error) {
-      console.log(error);
+      logger.error('Error al iniciar sesion', error)
       res.status(500).json({ status: "error", error: "Internal error server" });
     }
   }
@@ -96,7 +97,8 @@ router.get(
 );
 
 router.get("/faillogin", (req, res) => {
-  console.log("Falló estrategia de login");
+  logger.error("Falló estrategia de login")
+  /* console.log("Falló estrategia de login"); */
   res.json({ error: "Failed login" });
 });
 

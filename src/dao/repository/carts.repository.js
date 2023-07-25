@@ -1,4 +1,5 @@
 const Tickets = require('../models/Tickets.model')
+const logger = require('../../utils/logger.utils')
 
 class CartsRepository{
     async saveProduct(cart, product) {
@@ -15,7 +16,9 @@ class CartsRepository{
             });
           }
           await cart.save();
+          logger.debug('Producto guardado con exito')
         } catch (error) {
+          logger.error('Error al agregar producto a carrito', error)
           throw error
         }
       }

@@ -15,6 +15,7 @@ const MessagesDao = require('./dao/Messages.dao')
 const router = require('./router');
 const initializePassport = require('./config/passport.config')
 const errorHandler = require("./middlewares/errors");
+const logger = require('./utils/logger.utils')
 
 const pm = new productManager('./files/products.json');
 const Messages = new MessagesDao()
@@ -67,8 +68,9 @@ router(app)
 app.use(errorHandler)
 
 
+
 //Levantamiento del servidor de express
-const httpServer = app.listen(port, ()=>{console.log(`Server running at port ${port}`)})
+const httpServer = app.listen(port, ()=>{logger.info(`Server running at port ${port}`)})
 
 //Levantamiento del servidor de sockets
 const io = new Server(httpServer);

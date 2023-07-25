@@ -144,7 +144,8 @@ router.delete('/:pid', adminAccess, async(req,res)=>{
 router.post('/logout', (req, res) => {
     req.session.destroy((err) => {
       if (err) {
-        console.error(err);
+        logger.error('Error al cerrar sesion', err)
+        /* console.error(err); */
       } else {
         res.redirect('/');
       }

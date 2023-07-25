@@ -51,7 +51,7 @@ class CartsDAO {
       const cart = await Carts.findById(cartId);
       const newProducts = [];
   
-      console.log(products)
+      /* console.log(products) */
       products.forEach(product => {
         const index = cart.productos.findIndex(p => p.product === product._id);
   

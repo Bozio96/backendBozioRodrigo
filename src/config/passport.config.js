@@ -4,6 +4,7 @@ const GithubStrategy = require('passport-github2')
 const Users = require('../dao/models/Users.model');
 const {createHash, passwordValidate} = require('../utils/cryptPassword.utils');
 const usersCreate = require('../dao/Users.dao');
+const logger = require('../utils/logger.utils')
 
 const LocalStrategy = local.Strategy;
 
@@ -16,7 +17,8 @@ const initializePassport = ()=>{
                     const {first_name, last_name, email, age, password} = req.body;
                     const user = await Users.findOne({email: username});
                     if (user){ //Esta parte se puede obviar poniendo unique:true en el Schema
-                        console.log('Usuario ya existe');
+                        logger.info('Usuario ya existe')
+                        /* console.log('Usuario ya existe'); */
                         return done(null,false);
                     }
 
@@ -48,12 +50,14 @@ const initializePassport = ()=>{
                     const user = await Users.findOne({email: username});
 
                     if(!user){
-                        console.log('Usuario inexistente');
+                        logger.error('Datos invalidos')
+                        /* console.log('Usuario inexistente'); */
                         return done(null,false);
                     }
 
                     if(!passwordValidate(password, user)){
-                        console.log('Contraseña incorrecta');
+                        logger.info('Datos invalidos');
+                        /* console.log('Contraseña incorrecta'); */
                         return done(null,false);
                     }
 

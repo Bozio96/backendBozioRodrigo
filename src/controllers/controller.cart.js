@@ -7,6 +7,7 @@ const cm = new CartManager("./files/cart.json", pm);
 const checkData = require('../dao/Tickets.dao')
 const uuid = require('uuid');
 const userAccess = require("../middlewares/userAccess.middleware");
+const logger = require("../utils/logger.utils");
 
 //----------------------DB-------------------------
 //Crear carrito vacio
@@ -32,6 +33,7 @@ router.get("/:cid", userAccess , async (req, res) => {
       res.render('carts.handlebars', {cart});
     }
   } catch (error) {
+    logger.error('Error al traer el carrito', error)
     res.json({ message: error });
   }
 });
@@ -59,8 +61,10 @@ router.post("/:cid/products/:pid", userAccess,async (req, res) => {
       cart.productos[itemIndex].quantity++
     }
     await cart.save(); //Aca cambiarlo por un repository
+    logger.info('Producto agregado con exito')
     res.status(201).json({ message: "Producto agregado al carrito" });
   } catch (error) {
+    logger.error('Error al agregar el producto', error)
     return error;
   }
 }); 
@@ -72,7 +76,8 @@ router.delete('/:cid/products/:pid', async (req, res) => {
     const updatedCart = await cm.removeProductFromCart(cid, pid);
     res.json({ message: 'Product removed from cart', cart: updatedCart });
   } catch (error) {
-    console.log(error);
+    logger.error('Error al eliminar un producto', error)
+    /* console.log(error); */
     res.status(500).json({ error: 'Error removing product from cart' });
   }
 });
@@ -135,7 +140,8 @@ router.get('/:cid/purchase', async(req,res)=>{
     }
 
   } catch (error) {
-    console.log(error)
+    logger.error('Error al generar el ticket', error)
+    /* console.log(error) */
     res.status(500).json({error: 'Internal server error'})
   }
 })

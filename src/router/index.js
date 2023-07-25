@@ -5,6 +5,7 @@ const productsRouter = require('../controllers/controller.products')
 const cartRouter = require('../controllers/controller.cart')
 const messagesRouter = require('../controllers/controller.messages')
 const sessionsController = require('../controllers/controller.sessions')
+const loggerTest = require('../controllers/controller.loggerTest')
 const privateAccess = require('../middlewares/privateAccess.middleware')
 
 const router = app =>{
@@ -18,7 +19,7 @@ const router = app =>{
     app.use('/api/carts', cartRouter);
     app.use('/api/messages', privateAccess, messagesRouter)
     app.use('/api/sessions', sessionsController)
-    
+    app.use('/api/loggerTest', loggerTest)
     /* app.use('/', todosLosProductos); */
     /* app.use('/realtimeproducts', realTimeProducts) */
 }

@@ -20,7 +20,8 @@ router.post('/', userAccess,async (req, res, next) => {
         const msj = await Chats.create(user, message)
         res.json({ messages: msj })
     } catch (error) {
-        console.log(error);
+        logger.error('Error al enviar mensaje', error)
+       /*  console.log(error); */
         next(error)
         /* res.status(400).json({ error: error }) */
     }
