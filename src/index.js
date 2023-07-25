@@ -14,6 +14,7 @@ const productManager = require('./dao/Products.dao');
 const MessagesDao = require('./dao/Messages.dao')
 const router = require('./router');
 const initializePassport = require('./config/passport.config')
+const errorHandler = require("./middlewares/errors");
 
 const pm = new productManager('./files/products.json');
 const Messages = new MessagesDao()
@@ -63,6 +64,8 @@ app.set('view engine', 'handlebars');
 
 mongoConnect()
 router(app)
+app.use(errorHandler)
+
 
 //Levantamiento del servidor de express
 const httpServer = app.listen(port, ()=>{console.log(`Server running at port ${port}`)})

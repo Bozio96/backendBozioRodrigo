@@ -1,11 +1,15 @@
 const {Router} = require('express');
+const router = Router();
+
 const productManager = require('../dao/Products.dao');
 const pm = new productManager('/products.json')
 const uploader = require('../utils/multer.utils');
+const generateProducts = require('../utils/mock.utils');
 const privateAccess = require('../middlewares/privateAccess.middleware');
-const adminAccess = require('../middlewares/adminAccess.middleware')
-const router = Router();
-
+const adminAccess = require('../middlewares/adminAccess.middleware');
+const CustomError = require('../handlers/errors/CustomError')
+const EnumErrors = require('../handlers/errors/EnumError')
+const generateProductErrorInfo = require('../handlers/errors/info')
 
 //-------------------DB----------------------------------
 router.get('/', privateAccess, async (req,res)=>{
@@ -54,9 +58,29 @@ router.get('/', privateAccess, async (req,res)=>{
   }
 })
 
-router.post('/', adminAccess ,async (req,res)=>{
+router.get('/mockingproducts', (req,res)=>{
+  try {
+    const mockingProducts = generateProducts();
+    res.json({message: mockingProducts})
+  } catch (error) {
+    res.json({error: error})
+  }
+})
+
+
+router.post('/', /* adminAccess , */async (req,res)=>{
   try {
     const {title, description, code, price, stock, category, thumbnails} = req.body
+
+    if (!title || !price) {
+      CustomError.createError({
+      name: "Product creation error",
+      cause: generateProductErrorInfo({ title, price}),
+      message: "Error trying to create a product",
+      code: EnumErrors.INVALID_TYPES_ERROR
+      });
+      }
+      
     const newProductInfo = {
       title,
       description,
@@ -75,7 +99,7 @@ router.post('/', adminAccess ,async (req,res)=>{
       payload: newProduct
     })
   } catch (error) {
-    res.json({message: error})
+    res.json({error:error})
   }
 })
 

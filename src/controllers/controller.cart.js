@@ -120,7 +120,6 @@ router.get('/:cid/purchase', async(req,res)=>{
   try {
     const {cid} = req.params;
     const cart = await cm.getCartDBbyId(cid) 
-    console.log(req.session) //La session si la lee pero viene solo la cookie
     const email = req.user.email; //Para el desafio del carrito no me lee el user tampoco
     const code = uuid.v4()
 
