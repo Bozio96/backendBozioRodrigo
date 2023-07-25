@@ -44,7 +44,7 @@ const productionLogger = winston.createLogger({
 });
 
 let logger;
-if (dev_env === "production") {
+if (dev_env === "production") { 
   logger = productionLogger;
 } else {
   logger = developmentLogger;
