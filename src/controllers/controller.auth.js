@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const passport = require("passport");
 const logger = require("../utils/logger.utils");
+const ResetPasswordRepository = require('../dao/repository/resetPassword.repository')
+const Users = require('../dao/models/Users.model')
 
 const router = Router();
 
@@ -105,5 +107,60 @@ router.get("/faillogin", (req, res) => {
 router.get("/redirect", (req, res) => {
   res.redirect("/api/login");
 });
+
+
+//Parte de Recuperación de contraseña
+router.get('/forgetPassword' , (req,res)=>{
+  try {
+    res.render('forgetPassword.handlebars')
+  } catch (error) {
+    logger.error('Error', error)
+  }
+})
+
+router.get('/forgetPassword/:email', (req, res) => {
+  try {
+    const {email}= req.params
+
+    res.render('resetPassword.handlebars', {email})
+  } catch (error) {
+    logger.error('Error', error)
+  }
+})
+
+router.post('/forgetPassword',async (req, res) => {
+  try {
+    const {email} = req.body
+
+    const session = await Users.findOne({email: email})
+
+    if (!session){
+      throw new Error('Usuario no encontrado, verifica tu correo electronico')
+    }
+
+    const resetPasswordRepository = new ResetPasswordRepository()
+    const createToken = await resetPasswordRepository.createToken(email, res)
+
+    res.json({message: 'token sent successfully',
+              token: createToken})
+  } catch (error) {
+    logger.error('Error', error)
+  }
+})
+
+router.post('/resetPassword/:email', async (req, res) => {
+  const newPassword = req.body.newPassword
+  const token = req.cookies.resetToken
+  const email = req.params.email
+  
+  try {
+    const resetPasswordRepository = new ResetPasswordRepository()
+    await resetPasswordRepository.resetPassword(newPassword, token, email)
+
+    res.status(200).json({message: 'Contraseña cambiada con exito'})
+  } catch (error) {
+    logger.error('Error', error)
+  }
+})
 
 module.exports = router;

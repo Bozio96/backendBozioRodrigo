@@ -18,7 +18,7 @@ const collectionSchema = new mongoose.Schema({
     }, //Populate("cartId.carts")
     role: {
         type: String,
-        enum: ['admin', 'user'],
+        enum: ['admin', 'user', 'premium'],
         default: 'user',
     }
 })
