@@ -149,13 +149,13 @@ router.post('/forgetPassword',async (req, res) => {
 })
 
 router.post('/resetPassword/:email', async (req, res) => {
-  const newPassword = req.body.newPassword
-  const token = req.cookies.resetToken
-  const email = req.params.email
+  const {newPassword} = req.body
+  const {tokenPassword} = req.cookies
+  const {email} = req.params
   
   try {
     const resetPasswordRepository = new ResetPasswordRepository()
-    await resetPasswordRepository.resetPassword(newPassword, token, email)
+    await resetPasswordRepository.resetPassword(newPassword, tokenPassword, email)
 
     res.status(200).json({message: 'Contraseña cambiada con exito'})
   } catch (error) {

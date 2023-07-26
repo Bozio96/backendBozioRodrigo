@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+const mail_pass = require('../config/app.config')
 
 const transport = nodemailer.createTransport({
     /* host: 'smtp.gmail.com', */
@@ -7,12 +8,12 @@ const transport = nodemailer.createTransport({
     port: 587,
  /*    port: 465,   */
     /* secure: true, */
-    rejectUnauthorized: false, //ESTO ME PUEDE SALVAR
+    /* rejectUnauthorized: false, */ //ESTO ME PUEDE SALVAR
     auth:{
        /*  user:'rodri@desusweb.com',
         password: 's7*o@Xw6dO', */
         user:'rodrigobozio96@gmail.com',
-        passowrd:'qnmukjjyramheggy',
+        passowrd: mail_pass,
     }
 })
 

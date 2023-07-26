@@ -1,6 +1,5 @@
 const port = require('../../config/app.config')
 const {generateToken, verifyToken} = require('../../utils/jwt.utils')
-//const verifyToken = require('../../utils/jwt.utils')
 const passwordValidate = require('../../utils/cryptPassword.utils')
 const createHash = require('../../utils/cryptPassword.utils')
 const logger = require('../../utils/logger.utils')
@@ -20,9 +19,8 @@ class ResetPasswordRepository{
                 text: `Para restablecer constraseña haga click aqui: ${resetLink}` 
             }
             transport.sendMail(mailOptions, (error, info)=>{
-                if(error){
-                    console.log(error)
-                    //logger.error('Error al enviar correo', error)
+                if(error){  
+                    logger.error('Error al enviar correo', error)
                 }else{
                     logger.info('Correo enviado', info.response )
                 }
