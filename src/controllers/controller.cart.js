@@ -75,7 +75,7 @@ router.post("/:cid/products/:pid", userAccess,async (req, res) => {
   }
 }); 
 
-//Elimina un producto del carrito
+//Elimina un producto del carrito 
 router.delete('/:cid/products/:pid', async (req, res) => {
   try {
     const { cid, pid } = req.params;

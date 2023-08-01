@@ -5,6 +5,8 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const passport = require('passport');
 const morgan = require('morgan')
+const swaggerUiExpress = require('swagger-ui-express')
+const swaggerJSDoc = require('swagger-jsdoc')
 
 const {Server} = require('socket.io')
 const {port} = require('./config/app.config')
@@ -62,6 +64,22 @@ const hbs = handlebars.create({
 app.engine('handlebars', hbs.engine);
 app.set('views', __dirname +'/views');
 app.set('view engine', 'handlebars');
+
+
+//Swagger
+const swaggerOptions = {
+    definition:{
+        openapi: '3.0.1',
+        info:{
+            title: 'Documentación de EComerce - CoderHouse - Bozio Rodrigo',
+            description: 'Aplicación para CRUD de productos y carritos'
+        }
+    },
+    apis:[`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 mongoConnect()
 router(app)
