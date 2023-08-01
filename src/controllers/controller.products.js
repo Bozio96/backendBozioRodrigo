@@ -11,6 +11,7 @@ const CustomError = require('../handlers/errors/CustomError')
 const EnumErrors = require('../handlers/errors/EnumError')
 const generateProductErrorInfo = require('../handlers/errors/info');
 const Products = require('../dao/models/Products.model');
+const Users = require('../dao/models/Users.model');
 
 //-------------------DB----------------------------------
 router.get('/', privateAccess, async (req,res)=>{
@@ -164,7 +165,19 @@ router.delete('/:pid', adminAccess, async(req,res)=>{
 })
 
 //Cerrar sesion
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
+      const fechaActual = new Date()
+
+      const dia = String(fechaActual.getDate()).padStart(2, '0');
+      const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
+      const anio = String(fechaActual.getFullYear()).slice(-2);
+      const horas = String(fechaActual.getHours()).padStart(2, '0');
+      const minutos = String(fechaActual.getMinutes()).padStart(2, '0');
+
+      const fecha = `${dia}/${mes}/${anio} ${horas}:${minutos}`;
+      
+      await Users.findByIdAndUpdate(req.session.user._id, {last_connection: fecha}) 
+
     req.session.destroy((err) => {
       if (err) {
         logger.error('Error al cerrar sesion', err)

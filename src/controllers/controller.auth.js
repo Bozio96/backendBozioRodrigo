@@ -28,6 +28,18 @@ router.post(
         cartId: req.user.cartId
       };  
 
+      const fechaActual = new Date()
+
+      const dia = String(fechaActual.getDate()).padStart(2, '0');
+      const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
+      const anio = String(fechaActual.getFullYear()).slice(-2); // Solo los últimos dos dígitos del año
+      const horas = String(fechaActual.getHours()).padStart(2, '0');
+      const minutos = String(fechaActual.getMinutes()).padStart(2, '0');
+
+      // Formatear la fecha y hora en el formato deseado
+      const fecha = `${dia}/${mes}/${anio} ${horas}:${minutos}`;
+      await Users.findByIdAndUpdate(req.user._id, {last_connection: fecha})
+
       logger.info('Sesion iniciada con éxito')
       res.json({ status: "success", message: "Sesion iniciada" });
 
