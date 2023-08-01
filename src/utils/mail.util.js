@@ -6,15 +6,18 @@ const transport = nodemailer.createTransport({
     service: 'gmail',
    /*  service: 'c1870509.ferozo.com', */
     port: 587,
- /*    port: 465,   */
-    /* secure: true, */
+    /* port: 465,   */
+    /* secure: false, */
     /* rejectUnauthorized: false, */ //ESTO ME PUEDE SALVAR
     auth:{
        /*  user:'rodri@desusweb.com',
         password: 's7*o@Xw6dO', */
         user:'rodrigobozio96@gmail.com',
-        passowrd: mail_pass,
-    }
+        pass: mail_pass,
+    },
+   /*  tls:{
+        rejectUnauthorized: false
+    } */
 })
 
 module.exports = transport

@@ -20,7 +20,8 @@ class ResetPasswordRepository{
             }
             transport.sendMail(mailOptions, (error, info)=>{
                 if(error){  
-                    logger.error('Error al enviar correo', error)
+                    console.log(error)
+                    //logger.error('Error al enviar correo', error)
                 }else{
                     logger.info('Correo enviado', info.response )
                 }

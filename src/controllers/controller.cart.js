@@ -11,7 +11,7 @@ const logger = require("../utils/logger.utils");
 
 //----------------------DB-------------------------
 //Crear carrito vacio
-router.post("/", async (req, res) => {
+router.post("/", userAccess, async (req, res) => {
   try {
     const emptyCart = await cm.createCartDB({});
     res.status(201).json({ message: "Carrito creado con exito", emptyCart });
@@ -51,6 +51,12 @@ router.post("/:cid/products/:pid", userAccess,async (req, res) => {
     if (!product) {
       res.status(404).json({ error: "Producto no encontrado" });
     }
+
+    //Parte del permiso de usuario
+    if(req.session.user.role === 'premium' && product.owner !== 'premium'){
+      return new Error('Forbiden')
+    }
+
     const itemIndex = cart.productos.findIndex(p => p.product._id.toString() === pid)
     if(itemIndex === -1 ){
       cart.productos.push({
@@ -60,7 +66,7 @@ router.post("/:cid/products/:pid", userAccess,async (req, res) => {
     }else{
       cart.productos[itemIndex].quantity++
     }
-    await cart.save(); //Aca cambiarlo por un repository
+    await cart.save();
     logger.info('Producto agregado con exito')
     res.status(201).json({ message: "Producto agregado al carrito" });
   } catch (error) {
@@ -93,7 +99,7 @@ router.put("/:cid", async (req, res) => {
   } catch (error) {
     res.json({ message: error });
   }
-}); //Repite productos
+});
 
 //Actualizar un carrito con la cantidad de productos unicamente
 router.put("/:cid/products/:pid", async (req, res) => {

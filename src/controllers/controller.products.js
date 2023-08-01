@@ -9,7 +9,8 @@ const privateAccess = require('../middlewares/privateAccess.middleware');
 const adminAccess = require('../middlewares/adminAccess.middleware');
 const CustomError = require('../handlers/errors/CustomError')
 const EnumErrors = require('../handlers/errors/EnumError')
-const generateProductErrorInfo = require('../handlers/errors/info')
+const generateProductErrorInfo = require('../handlers/errors/info');
+const Products = require('../dao/models/Products.model');
 
 //-------------------DB----------------------------------
 router.get('/', privateAccess, async (req,res)=>{
@@ -68,8 +69,19 @@ router.get('/mockingproducts', (req,res)=>{
 })
 
 
-router.post('/', /* adminAccess , */async (req,res)=>{
+router.post('/', adminAccess ,async (req,res)=>{
   try {
+    if(req.session.user.role !== 'premium' && req.session.user.role !== 'administrador'){
+      throw new Error('Forbiden')
+    }
+
+    if(req.body.owner === null){
+      req.body.owner === 'admin'
+    }
+
+    req.body.owner = req.session.user.email
+
+    
     const {title, description, code, price, stock, category, thumbnails} = req.body
 
     if (!title || !price) {
@@ -122,6 +134,12 @@ router.patch('/:pid', adminAccess, uploader.single('file'), async(req,res)=>{
   try{
     const {pid} = req.params;
     const data = req.body
+    const product = await Products.findById(pid)
+
+    if (req.session.user.role === 'administrador' || (req.session.user.email !== 'premium' && product.owner !== 'premium')) {
+      return new Error('Unauthorized')
+    }
+
     await pm.actualizarUno(pid, data);
     res.status(200).json('Producto actualizado')
   }catch(error)
@@ -133,7 +151,12 @@ router.patch('/:pid', adminAccess, uploader.single('file'), async(req,res)=>{
 router.delete('/:pid', adminAccess, async(req,res)=>{
   try {
     const {pid} = req.params;
-    pm.eliminarUno(pid);
+    const product = await Products.findById(pid)
+
+    if(req.session.user.role === 'admin' || (req.session.user.role !== 'premiun' && product.owner !== 'premium')){
+      return new Error('Unauthorized')
+    }
+    await pm.eliminarUno(pid);
     res.status(200).json('Producto Eliminado')
   } catch (error) {
     res.json({message: error})

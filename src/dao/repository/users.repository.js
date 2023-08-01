@@ -27,6 +27,24 @@ class UsersRepository {
             throw error
         }
     }
+
+    changeRole = async(user)=>{
+        try {
+            const usuario = await Users.findOne({_id: user._id})
+
+            if(usuario.role === 'user'){
+                usuario.role = 'premium'
+            }else{
+                usuario.role = 'user'
+            }
+
+            await usuario.updateOne({role: usuario.role})
+
+            return usuario
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
 module.exports = UsersRepository
