@@ -5,6 +5,7 @@ class UsersDTO{
         this.email = userSession.email;
         this.age = userSession.age;
         this.role = userSession.role
+        this.last_connection = userSession.last_connection   
     }
 }
 

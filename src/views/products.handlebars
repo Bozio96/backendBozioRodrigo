@@ -1,3 +1,7 @@
+<form method="get" action="/docs">
+  <button type="submit">Ver documentación</button>
+</form>
+
 <h1>Bienvenido: {{user.first_name}} {{user.last_name}}</h1>
 <p>Edad: {{user.age}} años</p>
 <p>Correo: {{user.email}}</p>
@@ -5,6 +9,14 @@
 
 <form method="get" action="/api/carts/{{user.cartId}}">
       <button type="submit">Ir a tu carrito</button>
+</form>
+
+<form method="get" action="/api/admin">
+  <button type="submit">Ir a panel de admininstrador</button>
+</form>
+
+<form method="get" action="/api/users">
+  <button type="submit">Ver todos los usuarios</button>
 </form>
 
 <h2>Productos</h2>

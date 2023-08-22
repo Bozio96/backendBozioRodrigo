@@ -16,10 +16,16 @@ const initializePassport = ()=>{
                 try {
                     const {first_name, last_name, email, age, password} = req.body;
                     const user = await Users.findOne({email: username});
+                    let role;
                     if (user){ //Esta parte se puede obviar poniendo unique:true en el Schema
                         logger.info('Usuario ya existe')
                         /* console.log('Usuario ya existe'); */
                         return done(null,false);
+                    }
+                    if (email === 'admin@admin.com' && password === 'admin'){
+                        role = 'admin'
+                    }else{
+                        role = 'user'
                     }
 
                    
@@ -28,6 +34,7 @@ const initializePassport = ()=>{
                         last_name,
                         email,
                         age,
+                        role,
                         password: createHash(password),
                     };
 

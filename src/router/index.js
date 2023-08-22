@@ -7,6 +7,7 @@ const messagesRouter = require('../controllers/controller.messages')
 const sessionsController = require('../controllers/controller.sessions')
 const loggerTest = require('../controllers/controller.loggerTest')
 const privateAccess = require('../middlewares/privateAccess.middleware')
+const adminController = require('../controllers/controller.admin')
 
 const router = app =>{
     //Esta maneja las 2 siguientes
@@ -20,6 +21,7 @@ const router = app =>{
     app.use('/api/messages', privateAccess, messagesRouter)
     app.use('/api/sessions', sessionsController)
     app.use('/api/loggerTest', loggerTest)
+    app.use('/api/admin', adminController)
     /* app.use('/', todosLosProductos); */
     /* app.use('/realtimeproducts', realTimeProducts) */
 }

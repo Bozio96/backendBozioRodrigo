@@ -6,6 +6,8 @@ const logger = require('../utils/logger.utils')
 const UserRepository = require('../dao/repository/users.repository')
 const uploader = require('../utils/multer.utils')
 const Users = require('../dao/models/Users.model')
+const UserDTO = require('../dao/dto/users.dto')
+const adminAccess = require('../middlewares/adminAccess.middleware')
 
 
 const router = Router()
@@ -69,6 +71,80 @@ router.post('/:uid/documents', uploader.any(), async (req,res)=>{
   }
 })
 
+router.get('/', async(req,res)=>{
+  try {
+    const users = await Users.find()
+    const userDTOs = users.map(user => new UserDTO(user))
+
+    res.status(200).json({message: userDTOs})
+
+  } catch (error) {
+    logger.error('Error al traer los usuarios', error)
+  }
+})
+
+
+router.delete('/', async (req, res) => {
+  try {
+    const now = new Date();
+    const twoDaysAgo = new Date(now.getTime() - (5 * 60 * 1000) /* (2 * 24 * 60 * 60 * 1000) */);
+  
+    const inactiveUsers = await Users.find({
+      last_connection: {
+        $lt: twoDaysAgo
+      }
+    });
+    console.log(twoDaysAgo)
+
+    console.log(inactiveUsers)
+
+  /*   await Users.deleteMany({
+      last_connection: {
+        $lt: twoDaysAgo
+      }
+    }) */
+  
+  /*   for (const user of inactiveUsers) {
+      await user.deleteOne();
+    } */
+  
+    res.status(200).json({message: `Esta ruta no hace nada...Usuarios eliminados: ${inactiveUsers.length}`});
+  } catch (error) {
+    logger.error(error)
+  }
+});
+
+router.get('/deleteUser/:uid',adminAccess, async (req, res, next) => {
+  try {
+    const userId = req.params.uid
+    const user = await Users.findOne({_id: userId})
+    await Users.deleteOne({_id: userId})
+
+    res.status(201).json({message: `Usuario ${user.email} eliminado`})
+  } catch (error) {
+    logger.error(error)
+  }
+
+})
+
+
+router.get('/changeRole/:uid',adminAccess,  async (req, res, next) => {
+  try {
+    const userId = req.params.uid
+    const user = await Users.findById(userId)
+
+    if(user.role === 'admin'){
+      logger.error('El usuario al que intentas cambiar el rol ya es admin')
+      return
+    }
+
+    const userRepository = new UserRepository()
+    const userChanged = await userRepository.changeRole(user)
+    res.status(200).json({message: `rol de ${userChanged.first_name} cambiado con exito`})
+  } catch (error) {
+    logger.error(error)
+  }
+})
 
 
 router.get('/failregister', (req,res)=>{

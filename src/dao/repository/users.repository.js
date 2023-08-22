@@ -5,7 +5,7 @@ class UsersRepository {
 
     createUser = async(userInfo)=>{
         try {
-            const {first_name, last_name, email, age, password} = userInfo
+            const {first_name, last_name, email, age, password, role} = userInfo
 
             const cart = new Carts()
             await cart.save()
@@ -17,6 +17,7 @@ class UsersRepository {
                 email,
                 age,
                 password,
+                role,
                 cartId
             }
 
